@@ -165,6 +165,10 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   .cp-nav{flex-direction:column}
   .cp-nav .cpn.next{text-align:left;align-items:flex-start}
   .cpn-read{align-self:stretch;text-align:center}
+  .tl-stage{grid-template-columns:1fr;gap:14px}
+  .tl-stage::before{display:none}
+  .tl-rail{padding-left:24px}
+  .tl-cards,.tl-cards.single{grid-template-columns:1fr}
 }
 /* ---- 顶部阅读进度条 ---- */
 #readbar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:100;transition:width .12s ease-out}
@@ -192,6 +196,20 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
 .hp-bar{height:8px;border-radius:5px;background:var(--accent-soft);overflow:hidden}
 .hp-bar i{display:block;height:100%;background:var(--g7);border-radius:5px;transition:width .35s ease}
 .dh-prog{margin-top:10px;font-size:13px;color:var(--g7);font-weight:700}
+/* ---- 成长轴：竖向时间轴 ---- */
+.tl-stage{display:grid;grid-template-columns:148px 1fr;gap:24px;position:relative;padding-bottom:28px}
+.tl-stage:not(:last-child)::before{content:"";position:absolute;left:6px;top:22px;bottom:2px;width:2px;background:var(--line)}
+.tl-rail{position:relative;padding-left:28px;padding-top:2px}
+.tl-dot{position:absolute;left:0;top:4px;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 4px var(--paper)}
+.tl-label b{display:block;font-family:"Noto Serif SC";font-weight:700;font-size:15px;color:var(--ink);line-height:1.45}
+.tl-label span{display:block;font-size:12px;color:var(--faint);margin-top:5px}
+.tl-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tl-cards.single{grid-template-columns:1fr}
+.hcard .hnum::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hc);margin-right:7px;vertical-align:middle}
+.hcard:hover{border-color:var(--hc)}
+.hen{font-size:11px;color:var(--faint);font-style:italic;letter-spacing:.3px;margin:2px 0 9px}
+.hcount b{color:var(--faint);font-weight:700}
+.hcount b.on{color:var(--g7)}
 </style>
 </head>
 <body>
@@ -304,7 +322,7 @@ function setRead(id,v){const s=readSet();v?s.add(id):s.delete(id);localStorage.s
 function onToggleRead(id){const v=!isRead(id);setRead(id,v);const b=document.getElementById('cp-readbtn');if(b){b.classList.toggle('on',v);b.textContent=v?'✓ 已读':'标记已读';}}
 function readNext(cur,next){setRead(cur,true);openConcept(next);}
 function neighbors(id){const i=ORDER.indexOf(id);return{prev:i>0?byId[ORDER[i-1]]:null,next:i<ORDER.length-1?byId[ORDER[i+1]]:null};}
-function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;}
+function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;if(document.getElementById('axis'))buildAxis();}
 function updateReadbar(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;const sc=h.scrollTop||document.body.scrollTop||0;const b=document.getElementById('readbar');if(b)b.style.width=(max>0?Math.min(100,sc/max*100):0)+'%';}
 window.addEventListener('scroll',updateReadbar,{passive:true});
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById('view-'+v).classList.add('on');window.scrollTo(0,0);}
@@ -332,16 +350,17 @@ function buildFound(){
 }
 function buildAxis(){
   const stages=[
-    {badge:'个人领域的成功',color:'--g1',desc:'管好自己（独立）',habits:['习惯1','习惯2','习惯3']},
-    {badge:'公众领域的成功',color:'--g4',desc:'与人共赢（互赖）',habits:['习惯4','习惯5','习惯6']},
-    {badge:'自我更新',color:'--g7',desc:'贯穿始终，包裹全部',habits:['习惯7']},
+    {name:'个人领域的成功',color:'--g1',desc:'管好自己（独立）',habits:['习惯1','习惯2','习惯3']},
+    {name:'公众领域的成功',color:'--g4',desc:'与人共赢（互赖）',habits:['习惯4','习惯5','习惯6']},
+    {name:'自我更新',color:'--g7',desc:'贯穿始终，包裹全部',habits:['习惯7']},
   ];
-  let h='';
+  const rs=readSet();let h='';
   stages.forEach(st=>{
-    h+=`<div class="stage"><div class="stage-head"><span class="badge" style="background:${cssv(st.color)}">${st.badge}</span><span class="sdesc">${st.desc}</span></div><div class="habit-row ${st.habits.length===1?'single':''}">`;
+    let cards='';
     st.habits.forEach(g=>{const hb=HABITS.find(x=>x.g===g);const col=cssv(colorVar[g]);
-      h+=`<div class="hcard" style="--hc:${col}" onclick="openHabit('${g}')"><div class="bar"></div><div class="hnum">${hb.num}</div><div class="hname">${hb.name}</div><div class="hcount"><b>${cntOf(g)}</b> 个概念 · ${hb.en}</div></div>`;});
-    h+='</div></div>';
+      const gn=NODES.filter(n=>n.g===g);const rd=gn.filter(n=>rs.has(n.id)).length;
+      cards+=`<div class="hcard" style="--hc:${col}" onclick="openHabit('${g}')"><div class="hnum">${hb.num}</div><div class="hname">${hb.name}</div><div class="hen">${hb.en}</div><div class="hcount"><b class="${rd?'on':''}">${rd}</b> / ${gn.length} 已读</div></div>`;});
+    h+=`<div class="tl-stage"><div class="tl-rail"><span class="tl-dot" style="background:${cssv(st.color)}"></span><div class="tl-label"><b>${st.name}</b><span>${st.desc}</span></div></div><div class="tl-cards${st.habits.length===1?' single':''}">${cards}</div></div>`;
   });
   document.getElementById('axis').innerHTML=h;
 }
