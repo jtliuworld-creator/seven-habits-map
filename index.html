@@ -256,7 +256,6 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
       </div>
       <div class="hero-right">
         <div id="hero-nav"></div>
-        <div class="home-progress" id="home-progress"></div>
       </div>
     </div>
   </div>
@@ -401,7 +400,8 @@ function buildHeroNav(){
 const HERO_QUOTES=[
   {t:'原则历久弥新，且<span class="a">放之四海而皆准</span>。它们在今日的现实意义更胜往昔。',by:'史蒂芬·柯维',en:'Stephen R. Covey'},
   {t:'人的行为总是一再重复。因此卓越不是一时的行为，<span class="a">而是习惯</span>。',by:'亚里士多德',en:'Aristotle'},
-  {t:'在刺激与回应之间，存在着<span class="a">选择的自由</span>；我们如何回应，决定了自己的成长。',by:'史蒂芬·柯维',en:'Stephen R. Covey'},
+  {t:'最令人鼓舞的事实，莫过于人能<span class="a">主动努力</span>以提升生命价值。',by:'亨利·索罗',en:'Henry Thoreau'},
+  {t:'<span class="a">重要之事</span>，绝不可受芝麻小事牵绊。',by:'歌德',en:'Goethe'},
 ];
 let _qi=0,_qtimer=null;
 function renderQuote(i,instant){const q=HERO_QUOTES[i];const el=document.getElementById('hero-quote');if(!el)return;
