@@ -139,7 +139,7 @@ nav .sp{flex:1}
 .c-id{font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--accent);letter-spacing:2px}
 .c-title{font-family:"Noto Serif SC";font-weight:900;font-size:30px;margin:6px 0 4px;line-height:1.25}
 .c-cat{display:inline-block;font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:5px;padding:2px 9px}
-.c-core{margin:24px 0;padding:22px 24px;background:var(--accent-soft);border-radius:12px;font-family:"Noto Serif SC";font-weight:700;font-size:19px;line-height:1.55;color:#9a3d1f}
+.c-core{margin:24px 0;padding:22px 24px;background:var(--accent-soft);border-radius:12px;font-family:"Noto Serif SC";font-weight:700;font-size:19px;line-height:1.55;color:#9a3d1f;text-align:center}
 .seg{margin:26px 0}
 .seg-h{display:flex;align-items:center;gap:10px;font-family:"Noto Serif SC";font-weight:700;font-size:16px;margin-bottom:10px;cursor:pointer}
 .seg-h .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
@@ -519,8 +519,8 @@ function openConcept(id){
   const lf=n.lf;
   const seg=(t,b,f)=>`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>${t}<span class="tog">展开/收起</span></div><div class="seg-body">${b}</div></div>`;
   let imgsrc='images/'+n.id+'.jpg';
-  let main=`<div class="c-head"><div class="c-illus"><img src="${imgsrc}" alt="${n.t}" onerror="this.parentNode.classList.add('noimg')"><div class="illus-ph">✎ 配图位 · ${n.id}.jpg<br><span>按配图手册生成后，命名为 ${n.id}.jpg 放入 images/ 即显示</span></div></div>
-    <div class="c-headtext"><div class="c-id">${n.id} · ${hb?hb.name:'地基概念'}</div><div class="c-title">${n.t}</div><span class="c-cat">${n.c}</span><div class="c-core">「${n.core}」</div></div></div>`;
+  let main=`<div class="c-head"><div class="c-headtext"><div class="c-id">${n.id} · ${hb?hb.name:'地基概念'}</div><div class="c-title">${n.t}</div><span class="c-cat">${n.c}</span></div><div class="c-illus"><img src="${imgsrc}" alt="${n.t}" onerror="this.parentNode.classList.add('noimg')"><div class="illus-ph">✎ 配图位 · ${n.id}.jpg<br><span>按配图手册生成后，命名为 ${n.id}.jpg 放入 images/ 即显示</span></div></div></div>
+    <div class="c-core">「${n.core}」</div>`;
   main+=seg('① 一个生活场景',lf.scene,false)+seg('② 这个概念在说什么',lf.concept,false)+seg('③ 柯维原始案例',lf.case,true)+seg('④ 什么时候会用错',lf.misuse,true)+seg('⑤ 怎么落到你自己身上',lf.apply,true);
   if(lf.checklist&&lf.checklist.length)main+=`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>⑥ 实践检查清单<span class="tog">展开/收起</span></div><ul class="checklist">${lf.checklist.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
   main+=`<div class="c-take"><div class="lbl">一句话带走</div><div class="txt">${n.take}</div><span class="copy" onclick="copyTake(this,'${n.take.replace(/'/g,"\\'")}')">复制这句</span></div>`;
