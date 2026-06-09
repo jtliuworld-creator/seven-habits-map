@@ -246,28 +246,29 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
 .msteps .key{color:var(--accent);font-weight:700}
 .mnote{font-size:13px;color:var(--faint);line-height:1.7;border-top:1px dashed var(--line);padding-top:12px;margin:0}
 .mnote b{color:var(--accent)}
-/* ---- 成熟模式图：代码重建版 ---- */
-.mc{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
-.mc-ring{padding:13px 16px;text-align:center;cursor:pointer;border-bottom:1px solid var(--line);transition:background .15s}
-.mc-ring:hover{background:var(--accent-soft)}
-.mc-ring b{display:block;font-family:"Noto Serif SC";font-weight:700;font-size:14px;color:var(--hc)}
-.mc-ring span{display:block;font-size:11px;color:var(--dim);margin-top:3px}
-.mc-ring.done b{color:var(--g7)}
-.mc-core{padding:14px}
-.mc-arrow{text-align:center;font-size:11px;color:var(--faint);margin-bottom:8px;letter-spacing:1px}
-.mc-band{text-align:center;font-size:12px;font-weight:700;color:#fff;border-radius:8px;padding:7px 10px;letter-spacing:.5px}
-.mc-band.band-dep{background:var(--g0)}
-.mc-band.band-ind{background:var(--g1)}
-.mc-band.band-int{background:var(--g4)}
-.mc-habits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
-.mc-chip{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border:1px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s}
-.mc-chip:hover{transform:translateY(-2px);border-color:var(--hc);box-shadow:var(--shadow)}
-.mc-no{width:23px;height:23px;border-radius:50%;background:var(--hc);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif SC"}
-.mc-nm{font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--ink);text-align:center;line-height:1.25}
-.mc-rd{font-size:10px;color:var(--faint)}
-.mc-chip.done{border-color:var(--g7);background:rgba(111,155,78,.08)}
-.mc-chip.done .mc-no{background:var(--g7)}
-.mc-chip.done .mc-rd{color:var(--g7);font-weight:700}
+/* ---- 成熟模式图：SVG 圆形（可点击·随已读高亮）---- */
+.mc-svg{width:100%;max-width:380px;height:auto;display:block;margin:0 auto}
+.mc-ring2{cursor:pointer}
+.mc-ring2 .ring{fill:none;stroke:#ece1ce;stroke-width:36;transition:stroke .15s}
+.mc-ring2:hover .ring{stroke:var(--accent-soft)}
+.mc-ring2.done .ring{stroke:rgba(111,155,78,.4)}
+.mc-ringlabel{font-family:"Noto Serif SC";font-weight:700;font-size:13px;fill:var(--ink)}
+.mc-bd{fill:var(--accent)}
+.mc-bandtext{font-size:11.5px;font-weight:700;fill:#fff;letter-spacing:.5px;text-anchor:middle}
+.mc-tri{fill:rgba(191,154,74,.08)}
+.mc-h{cursor:pointer}
+.mc-hit{fill:transparent;stroke:transparent;stroke-width:1.5;transition:fill .12s,stroke .12s}
+.mc-h:hover .mc-hit{fill:rgba(197,83,46,.10);stroke:var(--accent)}
+.mc-bno{fill:#fff;font-weight:700;font-size:11px;text-anchor:middle;dominant-baseline:central;font-family:"Noto Serif SC"}
+.mc-bnm{fill:var(--ink);font-weight:700;font-size:12px;text-anchor:middle;font-family:"Noto Serif SC"}
+.mc-done{fill:var(--g7);font-size:12px;font-weight:700;text-anchor:middle}
+/* ---- 成熟模式图右侧：阶段说明 ---- */
+.mstage{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
+.mstage .dot{width:11px;height:11px;border-radius:50%;margin-top:5px;flex:0 0 auto}
+.mstage .body{display:flex;flex-direction:column}
+.mstage .body .t{font-family:"Noto Serif SC";font-weight:700;font-size:14px;color:var(--ink)}
+.mstage .body .d{font-size:13px;color:var(--dim);margin-top:3px;line-height:1.6}
+.mstage .body .d b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -306,13 +307,11 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
     <div id="maturity-fig"></div>
     <div class="mtext">
       <h3>成熟模式图：一张总纲</h3>
-      <p class="mlead">从最底部读起——人都从<b>依赖期</b>出发（凡事靠别人），逐级向上：</p>
-      <ol class="msteps">
-        <li><b>习惯 1·2·3</b> 走向<span class="key">独立期</span>，赢得<b>个人领域的成功</b>——先管好自己。</li>
-        <li><b>习惯 4·5·6</b> 走向<span class="key">互赖期</span>，赢得<b>公众领域的成功</b>——再与人共赢。</li>
-        <li><b>习惯 7 不断更新</b> 像圆环包裹全部，为这趟向上的攀登持续供能。</li>
-      </ol>
-      <p class="mnote">顺序不可颠倒：先有个人成功，才谈得上公众成功。<b>点击图中任一习惯即可进入。</b></p>
+      <p class="mlead">从<b>依赖</b>走向<b>互赖</b>，七个习惯是一条不可跳级的成长路径——这张图自下而上读：</p>
+      <div class="mstage"><span class="dot" style="background:var(--g1)"></span><span class="body"><span class="t">依赖期 → 独立期</span><span class="d">习惯 1·2·3 先<b>管好自己</b>，赢得个人领域的成功。</span></span></div>
+      <div class="mstage"><span class="dot" style="background:var(--g4)"></span><span class="body"><span class="t">独立期 → 互赖期</span><span class="d">习惯 4·5·6 再<b>与人共赢</b>，赢得公众领域的成功。</span></span></div>
+      <div class="mstage"><span class="dot" style="background:var(--g7)"></span><span class="body"><span class="t">习惯 7 · 不断更新</span><span class="d">像圆环<b>包裹全部</b>，为这趟向上的攀登持续供能。</span></span></div>
+      <p class="mnote">顺序不可颠倒：先有个人成功，才谈得上公众成功。<b>点击左图任一习惯即可进入。</b></p>
     </div>
   </div>
   <div id="axis"></div>
@@ -456,17 +455,35 @@ function buildMaturity(){
     return `<div class="mc-chip${done?' done':''}" style="--hc:${col}" onclick="openHabit('${g}')" title="${hb.num} · ${hb.name}"><span class="mc-no">${hb.num.replace('习惯 ','')}</span><span class="mc-nm">${hb.name}</span><span class="mc-rd">${done?'✓ 读完':rd+' / '+gn.length}</span></div>`;};
   const c7=cssv(colorVar['习惯7']);
   const g7n=NODES.filter(n=>n.g==='习惯7');const r7=g7n.filter(n=>rs.has(n.id)).length;const d7=g7n.length&&r7===g7n.length;
-  el.innerHTML=`<div class="mc">
-    <div class="mc-ring${d7?' done':''}" style="--hc:${c7}" onclick="openHabit('习惯7')" title="习惯 7 · 不断更新"><b>习惯 7 · 不断更新</b><span>圆环包裹全部 · 为攀登持续供能 · ${d7?'✓ 读完':r7+' / '+g7n.length}</span></div>
-    <div class="mc-core">
-      <div class="mc-arrow">↑ 越往上越成熟</div>
-      <div class="mc-band band-int">互赖期 · 公众领域的成功</div>
-      <div class="mc-habits">${chip('习惯4')}${chip('习惯5')}${chip('习惯6')}</div>
-      <div class="mc-band band-ind">独立期 · 个人领域的成功</div>
-      <div class="mc-habits">${chip('习惯1')}${chip('习惯2')}${chip('习惯3')}</div>
-      <div class="mc-band band-dep">依赖期 · 起点（凡事靠别人）</div>
-    </div>
-  </div>`;
+  const habit=(g,x,y)=>{const hb=HABITS.find(z=>z.g===g);const col=cssv(colorVar[g]);
+    const gn=NODES.filter(n=>n.g===g);const rd=gn.filter(n=>rs.has(n.id)).length;const done=gn.length&&rd===gn.length;
+    return `<g class="mc-h" onclick="openHabit('${g}')"><title>${hb.num} · ${hb.name}（${done?'已读完':rd+'/'+gn.length}）</title>`
+      +`<rect class="mc-hit" x="${x-48}" y="${y-21}" width="96" height="44" rx="10"/>`
+      +`<circle cx="${x}" cy="${y-6}" r="10" fill="${done?cssv('--g7'):col}"/>`
+      +`<text class="mc-bno" x="${x}" y="${y-6}">${hb.num.replace('习惯 ','')}</text>`
+      +`<text class="mc-bnm" x="${x}" y="${y+16}">${hb.name}</text>`
+      +(done?`<text class="mc-done" x="${x+33}" y="${y-2}">✓</text>`:'')
+      +`</g>`;};
+  el.innerHTML=`<svg class="mc-svg" viewBox="0 0 400 400" role="img" aria-label="七个习惯成熟模式图">
+    <defs><clipPath id="mcclip"><circle cx="200" cy="200" r="158"/></clipPath>
+      <path id="mcarc" d="M 55 98 A 177 177 0 0 1 345 98" fill="none"/></defs>
+    <g class="mc-ring2${d7?' done':''}" onclick="openHabit('习惯7')"><title>习惯 7 · 不断更新（${d7?'已读完':r7+'/'+g7n.length}）</title>
+      <circle class="ring" cx="200" cy="200" r="177"/>
+      <text class="mc-ringlabel"><textPath href="#mcarc" startOffset="50%" text-anchor="middle">习惯 7 · 不断更新</textPath></text></g>
+    <circle cx="200" cy="200" r="158" fill="#f7f0e6"/>
+    <g clip-path="url(#mcclip)">
+      <polygon class="mc-tri" points="58,326 342,326 200,236"/>
+      <polygon class="mc-tri" points="92,214 308,214 200,112"/>
+      <rect class="mc-bd" x="0" y="328" width="400" height="24"/>
+      <rect class="mc-bd" x="0" y="216" width="400" height="24"/>
+      <rect class="mc-bd" x="0" y="88" width="400" height="24"/>
+      <text class="mc-bandtext" x="200" y="344">依赖期 · 起点</text>
+      <text class="mc-bandtext" x="200" y="232">独立期 · 个人领域的成功</text>
+      <text class="mc-bandtext" x="200" y="104">互赖期 · 公众领域的成功</text>
+    </g>
+    ${habit('习惯1',118,302)}${habit('习惯2',282,302)}${habit('习惯3',200,264)}
+    ${habit('习惯4',200,188)}${habit('习惯5',118,150)}${habit('习惯6',282,150)}
+  </svg>`;
 }
 function openHabit(g){
   const hb=HABITS.find(x=>x.g===g);
