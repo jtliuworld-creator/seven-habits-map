@@ -169,6 +169,9 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   .tl-stage::before{display:none}
   .tl-rail{padding-left:24px}
   .tl-cards,.tl-cards.single{grid-template-columns:1fr}
+  .hero-grid{grid-template-columns:1fr;gap:30px}
+  .hero-quote{min-height:0}
+  .hero-quote .hq-text{font-size:21px}
 }
 /* ---- 顶部阅读进度条 ---- */
 #readbar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:100;transition:width .12s ease-out}
@@ -210,6 +213,26 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
 .hen{font-size:11px;color:var(--faint);font-style:italic;letter-spacing:.3px;margin:2px 0 9px}
 .hcount b{color:var(--faint);font-weight:700}
 .hcount b.on{color:var(--g7)}
+/* ---- 首屏：左文右构 ---- */
+.hero{padding:44px 0 30px}
+.hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:46px;align-items:center;max-width:1000px;margin:0 auto}
+.hero-left{text-align:left}
+.hero-quote{opacity:0;transition:opacity .45s ease;min-height:120px}
+.hero-quote.show{opacity:1}
+.hero-quote .hq-text{font-size:25px;line-height:1.62;margin:0}
+.hero-quote .hq-by{margin-top:16px}
+.hero-tagline{margin-top:22px;font-size:14px;color:var(--dim);line-height:1.85}
+.hero-left .hero-search{margin:22px 0 0;max-width:none}
+.hero-right{display:flex;flex-direction:column}
+#hero-nav .nav-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;text-decoration:none;box-shadow:var(--shadow);transition:border-color .12s,transform .12s}
+#hero-nav .nav-card+.nav-card{margin-top:10px}
+#hero-nav .nav-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.nc-ic{font-size:22px;line-height:1}
+.nc-body{flex:1;display:flex;flex-direction:column}
+.nc-t{font-family:"Noto Serif SC";font-weight:700;font-size:15px;color:var(--ink)}
+.nc-d{font-size:12px;color:var(--dim);margin-top:3px}
+.nc-n{font-size:13px;color:var(--accent);font-weight:700;white-space:nowrap}
+.hero-right .home-progress{max-width:none;margin:16px 0 0;padding-top:16px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -225,22 +248,20 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
 
 <div class="view on" id="view-home"><div class="wrap">
   <div class="hero">
-    <div class="hero-quotes">
-      <figure class="hq">
-        <p class="hq-text">原则历久弥新，且<span class="a">放之四海而皆准</span>。它们在今日的现实意义更胜往昔。</p>
-        <figcaption class="hq-by">史蒂芬·柯维<span class="en">Stephen R. Covey</span></figcaption>
-      </figure>
-      <figure class="hq">
-        <p class="hq-text">人的行为总是一再重复。因此卓越不是一时的行为，<span class="a">而是习惯</span>。</p>
-        <figcaption class="hq-by">亚里士多德<span class="en">Aristotle</span></figcaption>
-      </figure>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div id="hero-quote" class="hero-quote"></div>
+        <div class="hero-tagline">85 个概念 · 85 份深度拆解，<br>读懂并真正践行《高效能人士的七个习惯》。</div>
+        <div class="hero-search"><span class="ic">⌕</span><input id="hero-search" placeholder="搜索概念，或从这里开始…" autocomplete="off"><div class="results" id="hero-results"></div></div>
+      </div>
+      <div class="hero-right">
+        <div id="hero-nav"></div>
+        <div class="home-progress" id="home-progress"></div>
+      </div>
     </div>
-    <div class="sub">85 个核心概念，85 份深度拆解，让你真正吃透《高效能人士的七个习惯》。<br>唯有真正的理解，才能真正的践行。</div>
   </div>
 
-  <div class="home-progress" id="home-progress"></div>
-
-  <!-- 1. 地基概念 -->
+<!-- 1. 地基概念 -->
   <div class="slab" id="anchor-found"><span class="n">地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
   <p class="intro">柯维在七个习惯正式登场前，用整整两章铺设了这些根概念。它们是整座大厦的地基——不先理解它们，七个习惯会被读成一堆技巧。</p>
   <div class="found-grid" id="found"></div>
@@ -367,6 +388,27 @@ function buildAxis(){
 function buildScenes(){
   document.getElementById('scenes').innerHTML=SCENES.map((s,i)=>`<div class="scard" onclick="openScene(${i})"><div class="si">${sceneIcons[i]||'•'}</div><div class="st">${s.scene}</div><div class="sn">${s.nodes.length} 个相关概念</div></div>`).join('');
 }
+/* ===== 首屏：结构入口卡 + 名言轮播 ===== */
+function buildHeroNav(){
+  const cards=[
+    {ic:'📚',t:'地基概念',d:'读懂七习惯前的根概念',n:NODES.filter(x=>x.g==='第零层·地基').length+' 个',act:"jump('anchor-found')"},
+    {ic:'📈',t:'成长轴',d:'七个习惯，层层递进',n:HABITS.length+' 个习惯',act:"jump('anchor-axis')"},
+    {ic:'🎯',t:'场景查询',d:'带着困境，直接查',n:SCENES.length+' 个场景',act:"jump('anchor-scene')"},
+  ];
+  const el=document.getElementById('hero-nav');
+  if(el)el.innerHTML=cards.map(c=>`<a class="nav-card" onclick="${c.act}"><span class="nc-ic">${c.ic}</span><span class="nc-body"><span class="nc-t">${c.t}</span><span class="nc-d">${c.d}</span></span><span class="nc-n">${c.n}</span></a>`).join('');
+}
+const HERO_QUOTES=[
+  {t:'原则历久弥新，且<span class="a">放之四海而皆准</span>。它们在今日的现实意义更胜往昔。',by:'史蒂芬·柯维',en:'Stephen R. Covey'},
+  {t:'人的行为总是一再重复。因此卓越不是一时的行为，<span class="a">而是习惯</span>。',by:'亚里士多德',en:'Aristotle'},
+  {t:'在刺激与回应之间，存在着<span class="a">选择的自由</span>；我们如何回应，决定了自己的成长。',by:'史蒂芬·柯维',en:'Stephen R. Covey'},
+];
+let _qi=0,_qtimer=null;
+function renderQuote(i,instant){const q=HERO_QUOTES[i];const el=document.getElementById('hero-quote');if(!el)return;
+  const set=()=>{el.innerHTML=`<p class="hq-text">${q.t}</p><div class="hq-by">${q.by}<span class="en">${q.en}</span></div>`;el.classList.add('show');};
+  if(instant){set();return;}
+  el.classList.remove('show');setTimeout(set,260);}
+function startQuoteRotation(){renderQuote(0,true);if(_qtimer)clearInterval(_qtimer);_qtimer=setInterval(()=>{_qi=(_qi+1)%HERO_QUOTES.length;renderQuote(_qi);},6500);}
 function openHabit(g){
   const hb=HABITS.find(x=>x.g===g);
   document.getElementById('hb-crumb').textContent=hb?hb.name:'地基概念';
@@ -418,7 +460,8 @@ function doSearch(q,boxId){
 }
 function hideResults(){document.querySelectorAll('.results').forEach(r=>r.classList.remove('show'));}
 document.getElementById('nav-search').addEventListener('input',e=>doSearch(e.target.value,'nav-results'));
+{const hs=document.getElementById('hero-search');if(hs)hs.addEventListener('input',e=>doSearch(e.target.value,'hero-results'));}
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox')&&!e.target.closest('.hero-search'))hideResults();});
-buildFound();buildAxis();buildScenes();updateProgress();router();updateReadbar();
+buildFound();buildAxis();buildScenes();buildHeroNav();updateProgress();router();startQuoteRotation();updateReadbar();
 </script>
 </body></html>
