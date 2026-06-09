@@ -121,9 +121,17 @@ nav .sp{flex:1}
 .ccard .ccat{display:inline-block;font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 7px;margin-top:8px}
 .cpage{display:grid;grid-template-columns:1fr 280px;gap:36px;padding:32px 0 60px;align-items:start}
 .cside{position:sticky;top:80px}
+.c-head{display:flex;gap:26px;align-items:flex-start;margin-bottom:26px}
+.c-head .c-illus{flex:0 0 246px;width:246px;margin:0;text-align:center;position:relative}
+.c-headtext{flex:1;min-width:0;padding-top:4px}
 .c-illus{width:100%;margin-bottom:24px;text-align:center;position:relative}
-.c-illus.noimg{height:clamp(170px,26vh,240px);border-radius:14px;background:linear-gradient(135deg,#f3ece0,#faf6f0);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
-.c-illus img{max-height:clamp(180px,34vh,300px);max-width:100%;width:auto;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);display:inline-block}
+.c-illus.noimg{height:clamp(150px,24vh,210px);border-radius:14px;background:linear-gradient(135deg,#f3ece0,#faf6f0);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.c-illus img{max-width:100%;max-height:300px;width:auto;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);display:inline-block}
+@media(max-width:620px){
+  .c-head{flex-direction:column;gap:16px}
+  .c-head .c-illus{flex-basis:auto;width:100%}
+  .c-head .c-illus img{max-height:34vh}
+}
 .c-illus .illus-ph{display:none;text-align:center;color:var(--faint);font-size:13px;line-height:1.7;padding:20px}
 .c-illus .illus-ph span{font-size:11px;color:var(--faint)}
 .c-illus.noimg img{display:none}
@@ -511,8 +519,8 @@ function openConcept(id){
   const lf=n.lf;
   const seg=(t,b,f)=>`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>${t}<span class="tog">展开/收起</span></div><div class="seg-body">${b}</div></div>`;
   let imgsrc='images/'+n.id+'.jpg';
-  let main=`<div class="c-illus"><img src="${imgsrc}" alt="${n.t}" onerror="this.parentNode.classList.add('noimg')"><div class="illus-ph">✎ 配图位 · ${n.id}.jpg<br><span>按配图手册生成后，命名为 ${n.id}.jpg 放入 images/ 即显示</span></div></div>
-    <div class="c-id">${n.id} · ${hb?hb.name:'地基概念'}</div><div class="c-title">${n.t}</div><span class="c-cat">${n.c}</span><div class="c-core">「${n.core}」</div>`;
+  let main=`<div class="c-head"><div class="c-illus"><img src="${imgsrc}" alt="${n.t}" onerror="this.parentNode.classList.add('noimg')"><div class="illus-ph">✎ 配图位 · ${n.id}.jpg<br><span>按配图手册生成后，命名为 ${n.id}.jpg 放入 images/ 即显示</span></div></div>
+    <div class="c-headtext"><div class="c-id">${n.id} · ${hb?hb.name:'地基概念'}</div><div class="c-title">${n.t}</div><span class="c-cat">${n.c}</span><div class="c-core">「${n.core}」</div></div></div>`;
   main+=seg('① 一个生活场景',lf.scene,false)+seg('② 这个概念在说什么',lf.concept,false)+seg('③ 柯维原始案例',lf.case,true)+seg('④ 什么时候会用错',lf.misuse,true)+seg('⑤ 怎么落到你自己身上',lf.apply,true);
   if(lf.checklist&&lf.checklist.length)main+=`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>⑥ 实践检查清单<span class="tog">展开/收起</span></div><ul class="checklist">${lf.checklist.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
   main+=`<div class="c-take"><div class="lbl">一句话带走</div><div class="txt">${n.take}</div><span class="copy" onclick="copyTake(this,'${n.take.replace(/'/g,"\\'")}')">复制这句</span></div>`;
