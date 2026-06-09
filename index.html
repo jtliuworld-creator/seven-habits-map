@@ -264,8 +264,22 @@ EDGES.forEach(e=>{adj[e.s].push(e);adj[e.t].push(e);});
 const cntOf=g=>NODES.filter(n=>n.g===g).length;
 const sceneIcons=['🌀','🧭','😤','💢','🤝','👥','🗣️','🔋','💡'];
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById('view-'+v).classList.add('on');window.scrollTo(0,0);}
-function goHome(){show('home');}
-function jump(id){show('home');setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}),60);}
+/* ---------- hash 路由：URL 直达每个概念 ---------- */
+const grpSlug={'第零层·地基':'0','习惯1':'1','习惯2':'2','习惯3':'3','习惯4':'4','习惯5':'5','习惯6':'6','习惯7':'7'};
+const slugGrp={'0':'第零层·地基','1':'习惯1','2':'习惯2','3':'习惯3','4':'习惯4','5':'习惯5','6':'习惯6','7':'习惯7'};
+let _routing=false;
+function setHash(h){if(location.hash!==h){_routing=true;location.hash=h;}}
+function goHome(){show('home');setHash('#/');}
+function jump(id){show('home');setHash('#/');setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},60);}
+function router(){
+  if(_routing){_routing=false;return;}
+  const h=location.hash.replace(/^#/,'');let m;
+  if(m=h.match(/^\/c\/(.+)$/)){const id=decodeURIComponent(m[1]);if(byId[id])return openConcept(id);}
+  else if(m=h.match(/^\/h\/([0-7])$/)){const g=slugGrp[m[1]];if(g)return openHabit(g);}
+  else if(m=h.match(/^\/s\/(\d+)$/)){const i=+m[1];if(SCENES[i])return openScene(i);}
+  goHome();
+}
+window.addEventListener('hashchange',router);
 
 function buildFound(){
   const list=NODES.filter(n=>n.g==='第零层·地基');
@@ -297,7 +311,7 @@ function openHabit(g){
   document.getElementById('hb-name').textContent=hb?hb.name:'全书地基概念';
   document.getElementById('hb-en').textContent=hb?hb.en:'Foundational Paradigms';
   document.getElementById('hb-concepts').innerHTML=NODES.filter(n=>n.g===g).map(conceptCard).join('');
-  show('habit');
+  show('habit');setHash('#/h/'+grpSlug[g]);
 }
 function conceptCard(n){const col=cssv(colorVar[n.g]);
   return `<div class="ccard" style="--cc:${col}" onclick="openConcept('${n.id}')"><div class="cid">${n.id}</div><div class="cn">${n.t}</div><div class="ccore">「${n.core}」</div><span class="ccat">${n.c}</span></div>`;}
@@ -305,7 +319,7 @@ function openScene(i){const s=SCENES[i];
   document.getElementById('sc-icon').textContent=sceneIcons[i]||'';
   document.getElementById('sc-title').textContent=s.scene;
   document.getElementById('sc-concepts').innerHTML=s.nodes.map(id=>conceptCard(byId[id])).join('');
-  show('scene');}
+  show('scene');setHash('#/s/'+i);}
 const typeLabel={progression:'递进依赖 →',shared:'共享基础 ◇',prereq:'前置条件 ⊢'};
 function openConcept(id){
   const n=byId[id];const hb=HABITS.find(x=>x.g===n.g);
@@ -324,7 +338,7 @@ function openConcept(id){
   conns.forEach(c=>{const o=byId[c.o];const ct=cssv(colorVar[o.g]);
     side+=`<div class="conn" style="--ct:${ct}" onclick="openConcept('${c.o}')"><span class="ctype">${typeLabel[c.ty]}</span><div class="cnt">${o.id} ${o.t}</div><div class="cwhy">${c.w}</div></div>`;});
   document.getElementById('cp-side').innerHTML=side;
-  show('concept');
+  show('concept');setHash('#/c/'+n.id);
 }
 function copyTake(el,t){navigator.clipboard&&navigator.clipboard.writeText(t);el.textContent='已复制 ✓';setTimeout(()=>el.textContent='复制这句',1500);}
 function doSearch(q,boxId){
@@ -338,6 +352,6 @@ function doSearch(q,boxId){
 function hideResults(){document.querySelectorAll('.results').forEach(r=>r.classList.remove('show'));}
 document.getElementById('nav-search').addEventListener('input',e=>doSearch(e.target.value,'nav-results'));
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox')&&!e.target.closest('.hero-search'))hideResults();});
-buildFound();buildAxis();buildScenes();
+buildFound();buildAxis();buildScenes();router();
 </script>
 </body></html>
