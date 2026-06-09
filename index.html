@@ -121,8 +121,9 @@ nav .sp{flex:1}
 .ccard .ccat{display:inline-block;font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:4px;padding:1px 7px;margin-top:8px}
 .cpage{display:grid;grid-template-columns:1fr 280px;gap:36px;padding:32px 0 60px;align-items:start}
 .cside{position:sticky;top:80px}
-.c-illus{width:100%;height:clamp(170px,30vh,300px);border-radius:14px;overflow:hidden;margin-bottom:24px;background:linear-gradient(135deg,#f3ece0,#faf6f0);border:1px solid var(--line);position:relative;display:flex;align-items:center;justify-content:center}
-.c-illus img{width:100%;height:100%;object-fit:cover;display:block}
+.c-illus{width:100%;margin-bottom:24px;text-align:center;position:relative}
+.c-illus.noimg{height:clamp(170px,26vh,240px);border-radius:14px;background:linear-gradient(135deg,#f3ece0,#faf6f0);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.c-illus img{max-height:clamp(180px,34vh,300px);max-width:100%;width:auto;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);display:inline-block}
 .c-illus .illus-ph{display:none;text-align:center;color:var(--faint);font-size:13px;line-height:1.7;padding:20px}
 .c-illus .illus-ph span{font-size:11px;color:var(--faint)}
 .c-illus.noimg img{display:none}
