@@ -162,10 +162,40 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   .hero-quotes .hq{padding:24px 18px 14px}
   .hero-quotes .hq+.hq{border-left:none;border-top:1px solid var(--line)}
   .hq-text{font-size:18px}
+  .cp-nav{flex-direction:column}
+  .cp-nav .cpn.next{text-align:left;align-items:flex-start}
+  .cpn-read{align-self:stretch;text-align:center}
 }
+/* ---- 顶部阅读进度条 ---- */
+#readbar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:100;transition:width .12s ease-out}
+/* ---- 概念页 上一篇/下一篇 + 已读 ---- */
+.cp-nav{display:flex;align-items:stretch;gap:12px;margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}
+.cp-nav .cpn{flex:1;display:flex;flex-direction:column;gap:5px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);text-decoration:none;cursor:pointer;transition:border-color .12s,transform .12s}
+.cp-nav .cpn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.cp-nav .cpn.next{text-align:right;align-items:flex-end}
+.cp-nav .cpn.disabled{cursor:default;opacity:.45;background:transparent}
+.cp-nav .cpn.disabled:hover{border-color:var(--line);transform:none}
+.cpn-dir{font-size:12px;color:var(--accent);font-weight:700;letter-spacing:.3px}
+.cpn-t{font-size:14px;color:var(--ink);font-family:"Noto Serif SC";font-weight:700;line-height:1.4}
+.cpn-read{flex:0 0 auto;align-self:center;padding:10px 18px;border:1px solid var(--line);border-radius:24px;background:var(--card);font-family:inherit;font-size:13px;color:var(--dim);cursor:pointer;white-space:nowrap;transition:all .12s}
+.cpn-read:hover{border-color:var(--g7);color:var(--g7)}
+.cpn-read.on{background:var(--g7);border-color:var(--g7);color:#fff}
+/* ---- 卡片已读标记 ---- */
+.ccard.read,.fcard.read{position:relative}
+.ccard.read::after,.fcard.read::after{content:"✓ 已读";position:absolute;top:12px;right:14px;font-size:11px;font-weight:700;color:var(--g7);letter-spacing:.3px}
+.ccard.read,.fcard.read,.res-item.read,.conn.read{opacity:.6}
+.conn.read .cnt::before,.res-item.read .rt::before{content:"✓ ";color:var(--g7);font-weight:700}
+/* ---- 复习进度（首页 / 习惯页）---- */
+.home-progress{max-width:560px;margin:30px auto 0}
+.hp-row{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--dim);margin-bottom:8px}
+.hp-num b{color:var(--g7);font-size:16px}
+.hp-bar{height:8px;border-radius:5px;background:var(--accent-soft);overflow:hidden}
+.hp-bar i{display:block;height:100%;background:var(--g7);border-radius:5px;transition:width .35s ease}
+.dh-prog{margin-top:10px;font-size:13px;color:var(--g7);font-weight:700}
 </style>
 </head>
 <body>
+<div id="readbar"></div>
 <nav><div class="wrap">
   <div class="logo" onclick="goHome()">七个习惯 · <span class="a">概念图谱</span></div>
   <div class="sp"></div>
@@ -189,6 +219,8 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
     </div>
     <div class="sub">85 个核心概念，85 份深度拆解，让你真正吃透《高效能人士的七个习惯》。<br>唯有真正的理解，才能真正的践行。</div>
   </div>
+
+  <div class="home-progress" id="home-progress"></div>
 
   <!-- 1. 地基概念 -->
   <div class="slab" id="anchor-found"><span class="n">地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
@@ -224,7 +256,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
 <div class="view" id="view-habit"><div class="wrap">
   <div class="detail-head">
     <div class="crumb"><a onclick="goHome()">首页</a> › <span id="hb-crumb"></span></div>
-    <div class="dh-num" id="hb-num"></div><div class="dh-name" id="hb-name"></div><div class="dh-en" id="hb-en"></div>
+    <div class="dh-num" id="hb-num"></div><div class="dh-name" id="hb-name"></div><div class="dh-en" id="hb-en"></div><div class="dh-prog" id="hb-prog"></div>
   </div>
   <div class="concept-list" id="hb-concepts"></div>
 </div></div>
@@ -263,6 +295,18 @@ const adj={}; NODES.forEach(n=>adj[n.id]=[]);
 EDGES.forEach(e=>{adj[e.s].push(e);adj[e.t].push(e);});
 const cntOf=g=>NODES.filter(n=>n.g===g).length;
 const sceneIcons=['🌀','🧭','😤','💢','🤝','👥','🗣️','🔋','💡'];
+/* ===== 已读标记（localStorage）+ 阅读进度 ===== */
+const READ_KEY='sh7_read';
+const ORDER=NODES.map(n=>n.id);
+function readSet(){try{return new Set(JSON.parse(localStorage.getItem(READ_KEY)||'[]'));}catch(e){return new Set();}}
+function isRead(id){return readSet().has(id);}
+function setRead(id,v){const s=readSet();v?s.add(id):s.delete(id);localStorage.setItem(READ_KEY,JSON.stringify([...s]));document.querySelectorAll('[data-cid="'+id+'"]').forEach(el=>el.classList.toggle('read',v));updateProgress();}
+function onToggleRead(id){const v=!isRead(id);setRead(id,v);const b=document.getElementById('cp-readbtn');if(b){b.classList.toggle('on',v);b.textContent=v?'✓ 已读':'标记已读';}}
+function readNext(cur,next){setRead(cur,true);openConcept(next);}
+function neighbors(id){const i=ORDER.indexOf(id);return{prev:i>0?byId[ORDER[i-1]]:null,next:i<ORDER.length-1?byId[ORDER[i+1]]:null};}
+function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;}
+function updateReadbar(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;const sc=h.scrollTop||document.body.scrollTop||0;const b=document.getElementById('readbar');if(b)b.style.width=(max>0?Math.min(100,sc/max*100):0)+'%';}
+window.addEventListener('scroll',updateReadbar,{passive:true});
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById('view-'+v).classList.add('on');window.scrollTo(0,0);}
 /* ---------- hash 路由：URL 直达每个概念 ---------- */
 const grpSlug={'第零层·地基':'0','习惯1':'1','习惯2':'2','习惯3':'3','习惯4':'4','习惯5':'5','习惯6':'6','习惯7':'7'};
@@ -283,7 +327,7 @@ window.addEventListener('hashchange',router);
 
 function buildFound(){
   const list=NODES.filter(n=>n.g==='第零层·地基');
-  document.getElementById('found').innerHTML=list.map(n=>`<div class="fcard" onclick="openConcept('${n.id}')">
+  document.getElementById('found').innerHTML=list.map(n=>`<div class="fcard ${isRead(n.id)?'read':''}" data-cid="${n.id}" onclick="openConcept('${n.id}')">
     <div class="fid">${n.id}</div><div class="fn">${n.t}</div><div class="fco">「${n.core}」</div></div>`).join('');
 }
 function buildAxis(){
@@ -311,10 +355,12 @@ function openHabit(g){
   document.getElementById('hb-name').textContent=hb?hb.name:'全书地基概念';
   document.getElementById('hb-en').textContent=hb?hb.en:'Foundational Paradigms';
   document.getElementById('hb-concepts').innerHTML=NODES.filter(n=>n.g===g).map(conceptCard).join('');
+  const _gs=readSet(),_gn=NODES.filter(n=>n.g===g),_gd=_gn.filter(n=>_gs.has(n.id)).length;
+  document.getElementById('hb-prog').textContent='本习惯 '+_gd+' / '+_gn.length+' 已读';
   show('habit');setHash('#/h/'+grpSlug[g]);
 }
 function conceptCard(n){const col=cssv(colorVar[n.g]);
-  return `<div class="ccard" style="--cc:${col}" onclick="openConcept('${n.id}')"><div class="cid">${n.id}</div><div class="cn">${n.t}</div><div class="ccore">「${n.core}」</div><span class="ccat">${n.c}</span></div>`;}
+  return `<div class="ccard ${isRead(n.id)?'read':''}" data-cid="${n.id}" style="--cc:${col}" onclick="openConcept('${n.id}')"><div class="cid">${n.id}</div><div class="cn">${n.t}</div><div class="ccore">「${n.core}」</div><span class="ccat">${n.c}</span></div>`;}
 function openScene(i){const s=SCENES[i];
   document.getElementById('sc-icon').textContent=sceneIcons[i]||'';
   document.getElementById('sc-title').textContent=s.scene;
@@ -332,13 +378,15 @@ function openConcept(id){
   main+=seg('① 一个生活场景',lf.scene,false)+seg('② 这个概念在说什么',lf.concept,false)+seg('③ 柯维原始案例',lf.case,true)+seg('④ 什么时候会用错',lf.misuse,true)+seg('⑤ 怎么落到你自己身上',lf.apply,true);
   if(lf.checklist&&lf.checklist.length)main+=`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>⑥ 实践检查清单<span class="tog">展开/收起</span></div><ul class="checklist">${lf.checklist.map(c=>`<li>${c}</li>`).join('')}</ul></div>`;
   main+=`<div class="c-take"><div class="lbl">一句话带走</div><div class="txt">${n.take}</div><span class="copy" onclick="copyTake(this,'${n.take.replace(/'/g,"\\'")}')">复制这句</span></div>`;
+  const _nb=neighbors(n.id),_rd=isRead(n.id);
+  main+=`<div class="cp-nav">${_nb.prev?`<a class="cpn prev" onclick="openConcept('${_nb.prev.id}')"><span class="cpn-dir">← 上一篇</span><span class="cpn-t">${_nb.prev.id} ${_nb.prev.t}</span></a>`:`<span class="cpn disabled"><span class="cpn-dir">← 上一篇</span><span class="cpn-t">已是第一篇</span></span>`}<button class="cpn-read ${_rd?'on':''}" id="cp-readbtn" onclick="onToggleRead('${n.id}')">${_rd?'✓ 已读':'标记已读'}</button>${_nb.next?`<a class="cpn next" onclick="readNext('${n.id}','${_nb.next.id}')"><span class="cpn-dir">下一篇 →</span><span class="cpn-t">${_nb.next.id} ${_nb.next.t}</span></a>`:`<span class="cpn disabled"><span class="cpn-dir">下一篇 →</span><span class="cpn-t">已是最后一篇</span></span>`}</div>`;
   document.getElementById('cp-main').innerHTML=main;
   const conns=adj[id].map(e=>({o:e.s===id?e.t:e.s,ty:e.ty,w:e.w}));
   let side=`<div class="side-h">连接的概念（${conns.length}）</div>`;
   conns.forEach(c=>{const o=byId[c.o];const ct=cssv(colorVar[o.g]);
-    side+=`<div class="conn" style="--ct:${ct}" onclick="openConcept('${c.o}')"><span class="ctype">${typeLabel[c.ty]}</span><div class="cnt">${o.id} ${o.t}</div><div class="cwhy">${c.w}</div></div>`;});
+    side+=`<div class="conn ${isRead(c.o)?'read':''}" data-cid="${c.o}" style="--ct:${ct}" onclick="openConcept('${c.o}')"><span class="ctype">${typeLabel[c.ty]}</span><div class="cnt">${o.id} ${o.t}</div><div class="cwhy">${c.w}</div></div>`;});
   document.getElementById('cp-side').innerHTML=side;
-  show('concept');setHash('#/c/'+n.id);
+  show('concept');setHash('#/c/'+n.id);setTimeout(updateReadbar,60);
 }
 function copyTake(el,t){navigator.clipboard&&navigator.clipboard.writeText(t);el.textContent='已复制 ✓';setTimeout(()=>el.textContent='复制这句',1500);}
 function doSearch(q,boxId){
@@ -346,12 +394,12 @@ function doSearch(q,boxId){
   if(!q.trim()){box.classList.remove('show');return;}
   const ql=q.toLowerCase();
   const hits=NODES.filter(n=>n.t.toLowerCase().includes(ql)||n.core.toLowerCase().includes(ql)||n.c.includes(ql)||(n.lf.concept||'').toLowerCase().includes(ql)).slice(0,8);
-  box.innerHTML=hits.length?hits.map(n=>`<div class="res-item" onclick="openConcept('${n.id}');hideResults()"><div class="rid">${n.id}</div><div class="rt">${n.t}</div><div class="rc">「${n.core}」</div></div>`).join(''):'<div class="res-item"><div class="rc">没找到，换个词试试</div></div>';
+  box.innerHTML=hits.length?hits.map(n=>`<div class="res-item ${isRead(n.id)?'read':''}" data-cid="${n.id}" onclick="openConcept('${n.id}');hideResults()"><div class="rid">${n.id}</div><div class="rt">${n.t}</div><div class="rc">「${n.core}」</div></div>`).join(''):'<div class="res-item"><div class="rc">没找到，换个词试试</div></div>';
   box.classList.add('show');
 }
 function hideResults(){document.querySelectorAll('.results').forEach(r=>r.classList.remove('show'));}
 document.getElementById('nav-search').addEventListener('input',e=>doSearch(e.target.value,'nav-results'));
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox')&&!e.target.closest('.hero-search'))hideResults();});
-buildFound();buildAxis();buildScenes();router();
+buildFound();buildAxis();buildScenes();updateProgress();router();updateReadbar();
 </script>
 </body></html>
