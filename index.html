@@ -64,9 +64,12 @@ nav .sp{flex:1}
 .hero-search input:focus{outline:none;border-color:var(--accent)}
 .hero-search .ic{position:absolute;left:18px;top:16px;color:var(--faint)}
 
-.slab{display:flex;align-items:center;gap:12px;margin:52px 0 18px;scroll-margin-top:76px}
-.slab .n{font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--accent);letter-spacing:2px}
-.slab h2{font-family:"Noto Serif SC";font-weight:700;font-size:22px}
+.band{padding:58px 0 66px}
+.band-hero{padding:0 0 8px}
+.band-alt{background:#fffdf9;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.slab{display:block;margin:0 0 16px;scroll-margin-top:84px}
+.slab .n{display:inline-block;font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--accent);letter-spacing:3px;border-bottom:2px solid var(--accent);padding-bottom:4px;margin-bottom:12px}
+.slab h2{font-family:"Noto Serif SC";font-weight:900;font-size:25px}
 .slab .ln{flex:1;height:1px;background:var(--line)}
 .intro{font-size:14px;color:var(--dim);margin-bottom:22px;line-height:1.8}
 
@@ -108,7 +111,7 @@ nav .sp{flex:1}
 .scard .sn{font-size:12px;color:var(--faint);margin-top:8px}
 
 /* closing quote */
-.closing{margin:64px 0 20px;padding:48px 40px;background:linear-gradient(135deg,#2c2620,#3a322a);border-radius:18px;text-align:center}
+.closing{margin:0;padding:48px 40px;background:linear-gradient(135deg,#2c2620,#3a322a);border-radius:18px;text-align:center}
 .closing .cq{font-family:"Noto Serif SC";font-weight:500;font-size:21px;line-height:1.9;color:#f4e9da;max-width:760px;margin:0 auto}
 .closing .cby{font-size:14px;color:#bfa98c;margin-top:20px;font-style:italic}
 
@@ -340,7 +343,8 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   <div class="searchbox"><span class="ic">⌕</span><input id="nav-search" placeholder="搜索概念…" autocomplete="off"><div class="results" id="nav-results"></div></div>
 </div></nav>
 
-<div class="view on" id="view-home"><div class="wrap">
+<div class="view on" id="view-home">
+<section class="band band-hero"><div class="wrap">
   <div class="hero">
     <div class="hero-grid">
       <div class="hero-left">
@@ -353,14 +357,18 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
       </div>
     </div>
   </div>
+</div></section>
 
 <!-- 1. 地基概念 -->
-  <div class="slab" id="anchor-found"><span class="n">地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
+<section class="band" id="sec-found"><div class="wrap">
+  <div class="slab" id="anchor-found"><span class="n">01 · 地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
   <p class="intro">柯维在七个习惯正式登场前，用整整两章铺设了这些根概念。它们是整座大厦的地基——不先理解它们，七个习惯会被读成一堆技巧。</p>
   <div class="found-grid" id="found"></div>
+</div></section>
 
   <!-- 2. 成长轴(含成熟模式图) -->
-  <div class="slab" id="anchor-axis"><span class="n">成长轴</span><h2>沿着这条线，七个习惯层层递进</h2></div>
+<section class="band band-alt" id="sec-axis"><div class="wrap">
+  <div class="slab" id="anchor-axis"><span class="n">02 · 成长轴</span><h2>沿着这条线，七个习惯层层递进</h2></div>
   <div class="maturity">
     <div id="maturity-fig"></div>
     <div class="mtext">
@@ -373,18 +381,23 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
     </div>
   </div>
   <div id="axis"></div>
+</div></section>
 
   <!-- 3. 场景查询 -->
-  <div class="slab" id="anchor-scene"><span class="n">场景查询</span><h2>带着困境来，直接跳到该看的概念</h2></div>
+<section class="band" id="sec-scene"><div class="wrap">
+  <div class="slab" id="anchor-scene"><span class="n">03 · 场景查询</span><h2>带着困境来，直接跳到该看的概念</h2></div>
   <p class="intro">「文章读完就关掉，工具是遇到问题会回来翻的东西。」选一个此刻最像你的困境：</p>
   <div class="scene-grid" id="scenes"></div>
+</div></section>
 
   <!-- closing quote -->
+<section class="band band-alt"><div class="wrap">
   <div class="closing">
     <div class="cq">"谁也无法说服他人改变，因为我们每个人都守着一扇只能从内开启的改变之门，不论动之以情或晓之以理，我们都不能替别人开门。"</div>
     <div class="cby">—— 玛丽琳·弗格森（Marilyn Ferguson）</div>
   </div>
-</div></div>
+</div></section>
+</div>
 
 <div class="view" id="view-habit"><div class="wrap">
   <div class="detail-head">
