@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>七个习惯 · 概念图谱</title>
+<meta name="description" content="把《高效能人士的七个习惯》拆成 85 个核心概念，每个概念一份深度解读，配 21 天习惯打卡计划。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="七个习惯 · 概念图谱">
+<meta property="og:description" content="85 个核心概念 · 85 张配图 · 21 天习惯打卡，读懂并真正践行《高效能人士的七个习惯》。">
+<meta property="og:url" content="https://jtliuworld-creator.github.io/seven-habits-map/">
+<meta property="og:image" content="https://jtliuworld-creator.github.io/seven-habits-map/images/0.1.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23c5532e'/><text x='32' y='47' font-family='Georgia,serif' font-size='42' font-weight='bold' fill='white' text-anchor='middle'>7</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -522,7 +529,7 @@ const PLAN_KEY='sh7_planstart';
 function planStart(){let d=null;try{d=localStorage.getItem(PLAN_KEY);}catch(e){}
   if(!d){d=new Date().toISOString().slice(0,10);try{localStorage.setItem(PLAN_KEY,d);}catch(e){}}return d;}
 function resetPlanStart(){if(confirm('将打卡开始日期重置为今天？阅读记录不受影响。')){try{localStorage.setItem(PLAN_KEY,new Date().toISOString().slice(0,10));}catch(e){}buildPlan();}}
-function openPlan(){show('plan');buildPlan();setHash('#/plan');}
+function openPlan(){show('plan');buildPlan();setHash('#/plan');setTitle('21 天习惯打卡');}
 function togglePlanDay(i){const el=document.getElementById('pd-'+i);if(el)el.classList.toggle('open');}
 function buildPlan(){
   const start=planStart(),rs=readSet();
@@ -560,7 +567,8 @@ const grpSlug={'第零层·地基':'0','习惯1':'1','习惯2':'2','习惯3':'3'
 const slugGrp={'0':'第零层·地基','1':'习惯1','2':'习惯2','3':'习惯3','4':'习惯4','5':'习惯5','6':'习惯6','7':'习惯7'};
 let _routing=false;
 function setHash(h){if(location.hash!==h){_routing=true;location.hash=h;}}
-function goHome(){show('home');setHash('#/');}
+function setTitle(t){document.title=t?t+' · 七个习惯概念图谱':'七个习惯 · 概念图谱';}
+function goHome(){show('home');setHash('#/');setTitle('');}
 function jump(id){show('home');setHash('#/');setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});},60);}
 function router(){
   if(_routing){_routing=false;return;}
@@ -668,7 +676,7 @@ function openHabit(g){
   document.getElementById('hb-concepts').innerHTML=NODES.filter(n=>n.g===g).map(conceptCard).join('');
   const _gs=readSet(),_gn=NODES.filter(n=>n.g===g),_gd=_gn.filter(n=>_gs.has(n.id)).length;
   document.getElementById('hb-prog').textContent='本习惯 '+_gd+' / '+_gn.length+' 已读';
-  show('habit');setHash('#/h/'+grpSlug[g]);
+  show('habit');setHash('#/h/'+grpSlug[g]);setTitle(hb?'习惯'+hb.num+' '+hb.name:'地基概念');
 }
 function conceptCard(n){const col=cssv(colorVar[n.g]);
   return `<div class="ccard ${isRead(n.id)?'read':''}" data-cid="${n.id}" style="--cc:${col}" onclick="openConcept('${n.id}')"><div class="cid">${n.id}</div><div class="cn">${n.t}</div><div class="ccore">「${n.core}」</div><span class="ccat">${n.c}</span></div>`;}
@@ -676,7 +684,7 @@ function openScene(i){const s=SCENES[i];
   document.getElementById('sc-icon').textContent=sceneIcons[i]||'';
   document.getElementById('sc-title').textContent=s.scene;
   document.getElementById('sc-concepts').innerHTML=s.nodes.map(id=>conceptCard(byId[id])).join('');
-  show('scene');setHash('#/s/'+i);}
+  show('scene');setHash('#/s/'+i);setTitle(s.scene);}
 const typeLabel={progression:'递进依赖 →',shared:'共享基础 ◇',prereq:'前置条件 ⊢'};
 function openConcept(id){
   const n=byId[id];const hb=HABITS.find(x=>x.g===n.g);
@@ -697,7 +705,7 @@ function openConcept(id){
   conns.forEach(c=>{const o=byId[c.o];const ct=cssv(colorVar[o.g]);
     side+=`<div class="conn ${isRead(c.o)?'read':''}" data-cid="${c.o}" style="--ct:${ct}" onclick="openConcept('${c.o}')"><span class="ctype">${typeLabel[c.ty]}</span><div class="cnt">${o.id} ${o.t}</div><div class="cwhy">${c.w}</div></div>`;});
   document.getElementById('cp-side').innerHTML=side;
-  show('concept');setHash('#/c/'+n.id);setTimeout(updateReadbar,60);
+  show('concept');setHash('#/c/'+n.id);setTitle(n.id+' '+n.t);setTimeout(updateReadbar,60);
 }
 function copyTake(el,t){navigator.clipboard&&navigator.clipboard.writeText(t);el.textContent='已复制 ✓';setTimeout(()=>el.textContent='复制这句',1500);}
 function doSearch(q,boxId){
