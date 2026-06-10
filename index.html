@@ -66,16 +66,19 @@ nav .sp{flex:1}
 .hq-by{margin-top:18px;font-size:13px;letter-spacing:.6px;color:var(--dim);font-style:normal}
 .hq-by::before{content:"—— ";color:var(--gold)}
 .hq-by .en{margin-left:8px;font-style:italic;color:var(--faint)}
-.hero-search{margin:30px auto 0;max-width:480px;position:relative}
-.hero-search input{width:100%;padding:15px 18px 15px 46px;border:1px solid var(--line);border-radius:28px;background:var(--card);font-size:15px;font-family:inherit;box-shadow:var(--shadow)}
-.hero-search input:focus{outline:none;border-color:var(--accent)}
-.hero-search .ic{position:absolute;left:18px;top:16px;color:var(--faint)}
+.hero-cta{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.hc-main{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:26px;background:var(--accent);color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 14px rgba(197,83,46,.3);transition:transform .12s,box-shadow .12s}
+.hc-main:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(197,83,46,.38)}
+.hc-sub{font-size:14px;color:var(--dim);padding:13px 2px}
+.hc-sub:hover{color:var(--accent)}
 
 .band{padding:58px 0 66px}
 .band-screen{min-height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center}
 .band-screen>.wrap{width:100%}
 .band-hero{padding:0 0 8px}
-.band-alt{background:#fffdf9;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.band-deep{background:#f3ecdf;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.band-hero.band-deep{border-top:none}
+.band-lite{background:#fffdfa}
 .slab{display:block;margin:0 0 16px;scroll-margin-top:84px}
 .slab .n{display:inline-block;font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--accent);letter-spacing:3px;border-bottom:2px solid var(--accent);padding-bottom:4px;margin-bottom:12px}
 .slab h2{font-family:"Noto Serif SC";font-weight:900;font-size:25px}
@@ -91,7 +94,7 @@ nav .sp{flex:1}
 .fcard .fco{font-size:12px;color:var(--dim);line-height:1.5}
 
 /* maturity diagram block */
-.maturity{background:linear-gradient(135deg,#f7f0e6,#fdfaf4);border:1px solid var(--line);border-radius:18px;padding:30px;margin-bottom:26px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.maturity{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;margin-bottom:26px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
 .maturity img{width:100%;border-radius:8px}
 .m-side{display:flex;flex-direction:column;gap:7px}
 .ax-stage{display:flex;align-items:center;gap:9px;margin:12px 0 4px;font-size:12px}
@@ -233,7 +236,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 @media(max-width:760px){
   .scene-grid,.concept-list,.found-grid,.maturity{grid-template-columns:1fr}
   .cpage{grid-template-columns:1fr}.cside{position:static}
-  .hero .quote{font-size:23px}.searchbox{display:none}.navlink{display:none}.logo-text i{display:none}.closing{padding:28px 8px 0}.closing .cq{font-size:16px}
+  .hero .quote{font-size:23px}.navlink{display:none}.logo-text{display:none}.searchbox input{width:120px}.searchbox input:focus{width:150px}.closing{padding:28px 8px 0}.closing .cq{font-size:16px}
   .hero-quotes{flex-direction:column;max-width:560px}
   .hero-quotes .hq{padding:24px 18px 14px}
   .hero-quotes .hq+.hq{border-left:none;border-top:1px solid var(--line)}
@@ -288,7 +291,6 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 .hero-quote .hq-text{font-size:25px;line-height:1.62;margin:0}
 .hero-quote .hq-by{margin-top:16px}
 .hero-tagline{margin-top:22px;font-size:14px;color:var(--dim);line-height:1.85}
-.hero-left .hero-search{margin:22px 0 0;max-width:none}
 .hero-right{display:flex;flex-direction:column}
 #hero-nav .nav-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;text-decoration:none;box-shadow:var(--shadow);transition:border-color .12s,transform .12s}
 #hero-nav .nav-card+.nav-card{margin-top:10px}
@@ -350,13 +352,13 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 </div></nav>
 
 <div class="view on" id="view-home">
-<section class="band band-hero band-screen"><div class="wrap">
+<section class="band band-hero band-screen band-deep"><div class="wrap">
   <div class="hero">
     <div class="hero-grid">
       <div class="hero-left">
         <div id="hero-quote" class="hero-quote"></div>
         <div class="hero-tagline">85 个概念 · 85 份深度拆解，读懂并真正践行《高效能人士的七个习惯》。</div>
-        <div class="hero-search"><span class="ic">⌕</span><input id="hero-search" placeholder="搜索概念，或从这里开始…" autocomplete="off"><div class="results" id="hero-results"></div></div>
+        <div class="hero-cta"><a class="hc-main" onclick="openPlan()">⚑ 开始 21 天打卡</a><a class="hc-sub" onclick="openConcept('0.1')">从第一篇开始读 →</a></div>
       </div>
       <div class="hero-right">
         <div id="hero-nav"></div>
@@ -366,14 +368,14 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 </div></section>
 
 <!-- 1. 地基概念 -->
-<section class="band band-screen" id="sec-found"><div class="wrap">
+<section class="band band-screen band-lite" id="sec-found"><div class="wrap">
   <div class="slab" id="anchor-found"><span class="n">01 · 地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
   <p class="intro">柯维在七个习惯正式登场前，用整整两章铺设了这些根概念。它们是整座大厦的地基——不先理解它们，七个习惯会被读成一堆技巧。</p>
   <div class="found-grid" id="found"></div>
 </div></section>
 
   <!-- 2. 成长轴(含成熟模式图) -->
-<section class="band band-alt band-screen" id="sec-axis"><div class="wrap">
+<section class="band band-screen band-deep" id="sec-axis"><div class="wrap">
   <div class="slab" id="anchor-axis"><span class="n">02 · 成长轴</span><h2>沿着这条线，七个习惯层层递进</h2></div>
   <div class="maturity">
     <div id="maturity-fig"></div>
@@ -382,14 +384,14 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 </div></section>
 
   <!-- 3. 场景查询 -->
-<section class="band band-screen" id="sec-scene"><div class="wrap">
+<section class="band band-screen band-lite" id="sec-scene"><div class="wrap">
   <div class="slab" id="anchor-scene"><span class="n">03 · 场景查询</span><h2>带着困境来，直接跳到该看的概念</h2></div>
   <p class="intro">「文章读完就关掉，工具是遇到问题会回来翻的东西。」选一个此刻最像你的困境：</p>
   <div class="scene-grid" id="scenes"></div>
 </div></section>
 
   <!-- 04 柯维经典影像 + 结语 -->
-<section class="band band-alt band-screen" id="sec-video"><div class="wrap">
+<section class="band band-screen band-deep" id="sec-video"><div class="wrap">
   <div class="slab" id="anchor-video"><span class="n">04 · 柯维经典影像</span><h2>听柯维本人讲，再看一遍</h2></div>
   <p class="intro">文字读懂了框架，影像能看到态度。这三段最经典：</p>
   <div class="video-grid">
@@ -676,8 +678,7 @@ function doSearch(q,boxId){
 }
 function hideResults(){document.querySelectorAll('.results').forEach(r=>r.classList.remove('show'));}
 document.getElementById('nav-search').addEventListener('input',e=>doSearch(e.target.value,'nav-results'));
-{const hs=document.getElementById('hero-search');if(hs)hs.addEventListener('input',e=>doSearch(e.target.value,'hero-results'));}
-document.addEventListener('click',e=>{if(!e.target.closest('.searchbox')&&!e.target.closest('.hero-search'))hideResults();});
+document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))hideResults();});
 buildFound();buildAxis();buildScenes();buildHeroNav();buildMaturity();updateProgress();router();startQuoteRotation();updateReadbar();
 </script>
 </body></html>
