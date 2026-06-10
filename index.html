@@ -168,6 +168,48 @@ nav .sp{flex:1}
 .scene-hero{padding:40px 0 20px}.scene-hero .si{font-size:32px}
 .scene-hero h2{font-family:"Noto Serif SC";font-weight:900;font-size:28px;margin:8px 0}
 .scene-hero p{color:var(--dim);font-size:14px}
+/* 21 天习惯打卡 */
+.plan-hero{padding:34px 0 8px;text-align:center}
+.plan-hero .crumb{text-align:left}
+.plan-kicker{font-size:12px;letter-spacing:4px;color:var(--accent);font-weight:600;margin-top:18px}
+.plan-hero h2{font-family:"Noto Serif SC";font-weight:900;font-size:30px;margin:10px 0 8px}
+.plan-hero p{color:var(--dim);font-size:14px;max-width:580px;margin:0 auto}
+.plan-summary{display:flex;gap:14px;justify-content:center;margin:24px auto 0;flex-wrap:wrap}
+.ps-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 22px;box-shadow:var(--shadow);min-width:118px}
+.ps-card b{display:block;font-size:21px;font-family:"Noto Serif SC";color:var(--accent)}
+.ps-card span{font-size:12px;color:var(--dim)}
+.plan-bar{max-width:560px;margin:18px auto 0;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.plan-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d96a3f,var(--accent));border-radius:3px;transition:width .3s}
+.plan-days{max-width:760px;margin:30px auto 24px}
+.pd{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.pd.locked{opacity:.55;background:transparent;box-shadow:none}
+.pd.cur{border-color:var(--accent);box-shadow:0 4px 16px rgba(197,83,46,.12)}
+.pd-head{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer}
+.pd.locked .pd-head{cursor:default}
+.pd-day{font-family:"Noto Serif SC";font-weight:900;font-size:15px;width:64px;flex:none}
+.pd.cur .pd-day{color:var(--accent)}
+.pd-hb{font-size:12px;padding:2px 10px;border-radius:10px;background:var(--accent-soft);color:#9a3d1f;flex:none}
+.pd-info{font-size:12px;color:var(--dim);flex:1}
+.pd-state{font-size:13px;flex:none}
+.pd-state.done{color:#3f8f5a;font-weight:600}
+.pd-state.lock{color:var(--faint)}
+.pd-state.now{color:var(--accent);font-weight:600}
+.pd-body{display:none;border-top:1px solid var(--line);padding:6px 18px 12px}
+.pd.open .pd-body{display:block}
+.pd-item{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px dashed var(--line);font-size:14px}
+.pd-item:last-child{border-bottom:none}
+.pd-item .pid{font-size:11px;color:var(--accent);letter-spacing:1px;width:36px;flex:none}
+.pd-item .pt{flex:1}
+.pd-item:hover .pt{color:var(--accent)}
+.pd-item .pr{font-size:12px;color:var(--faint)}
+.pd-item .pr::after{content:'未读'}
+.pd-item.read .pr{color:#3f8f5a;font-weight:600}
+.pd-item.read .pr::after{content:'✓ 已读'}
+.pd-lockmsg{padding:10px 4px;font-size:12px;color:var(--faint)}
+.plan-reset{text-align:center;margin:0 0 56px;font-size:12px;color:var(--faint)}
+.plan-reset a{text-decoration:underline}
+@media(max-width:620px){.pd-head{flex-wrap:wrap;gap:8px}.pd-info{display:none}.plan-summary{gap:10px}.ps-card{padding:10px 14px;min-width:100px}}
+
 footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--faint);font-size:12px}
 @media(max-width:760px){
   .habit-row,.scene-grid,.concept-list,.found-grid,.maturity{grid-template-columns:1fr}
@@ -294,7 +336,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   <a class="navlink" onclick="jump('anchor-found')">地基概念</a>
   <a class="navlink" onclick="jump('anchor-axis')">成长轴</a>
   <a class="navlink" onclick="jump('anchor-scene')">场景查询</a>
-  <a class="nav-cta" onclick="setHash('#/plan')">⚑ 习惯打卡</a>
+  <a class="nav-cta" onclick="openPlan()">⚑ 习惯打卡</a>
   <div class="searchbox"><span class="ic">⌕</span><input id="nav-search" placeholder="搜索概念…" autocomplete="off"><div class="results" id="nav-results"></div></div>
 </div></nav>
 
@@ -364,6 +406,19 @@ footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:v
   <div class="cpage"><div class="cmain" id="cp-main"></div><div class="cside" id="cp-side"></div></div>
 </div></div>
 
+<div class="view" id="view-plan"><div class="wrap">
+  <div class="plan-hero">
+    <div class="crumb"><a onclick="goHome()">首页</a> › 习惯打卡</div>
+    <div class="plan-kicker">21 天习惯打卡</div>
+    <h2>用 21 天，读完 85 个概念</h2>
+    <p>每天 3–5 个概念，按「地基 → 习惯 1–7」的成长顺序推进。读完当天全部概念，即解锁下一天。中断几天不受罚，从停下的地方继续即可。</p>
+    <div class="plan-summary" id="plan-summary"></div>
+    <div class="plan-bar"><i id="plan-bar-i"></i></div>
+  </div>
+  <div class="plan-days" id="plan-days"></div>
+  <div class="plan-reset">进度仅保存在本浏览器中，换设备或清除缓存会丢失 · <a onclick="resetPlanStart()">↻ 重新计天（阅读记录保留）</a></div>
+</div></div>
+
 <footer>《高效能人士的七个习惯》概念图谱 · 课后随身教练 · 85 个概念 · 85 条链接</footer>
 
 <script>
@@ -395,9 +450,56 @@ function setRead(id,v){const s=readSet();v?s.add(id):s.delete(id);localStorage.s
 function onToggleRead(id){const v=!isRead(id);setRead(id,v);const b=document.getElementById('cp-readbtn');if(b){b.classList.toggle('on',v);b.textContent=v?'✓ 已读':'标记已读';}}
 function readNext(cur,next){setRead(cur,true);openConcept(next);}
 function neighbors(id){const i=ORDER.indexOf(id);return{prev:i>0?byId[ORDER[i-1]]:null,next:i<ORDER.length-1?byId[ORDER[i+1]]:null};}
-function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;if(document.getElementById('axis'))buildAxis();if(document.getElementById('maturity-fig'))buildMaturity();}
+function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;if(document.getElementById('axis'))buildAxis();if(document.getElementById('maturity-fig'))buildMaturity();const vp=document.getElementById('view-plan');if(vp&&vp.classList.contains('on'))buildPlan();}
 function updateReadbar(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;const sc=h.scrollTop||document.body.scrollTop||0;const b=document.getElementById('readbar');if(b)b.style.width=(max>0?Math.min(100,sc/max*100):0)+'%';}
 window.addEventListener('scroll',updateReadbar,{passive:true});
+/* ===== 21 天习惯打卡（进度驱动）===== */
+const DAY_PLAN=[
+ ['0.1','0.2','0.3','0.4','0.5'],['0.6','0.7','0.8','0.9'],
+ ['1.1','1.2','1.3','1.4'],['1.5','1.6','1.7','1.8'],['1.9','1.10','1.11'],
+ ['2.1','2.2','2.3','2.4','2.5'],['2.6','2.7','2.8','2.9'],
+ ['3.1','3.2','3.3','3.4'],['3.5','3.6','3.7'],['3.8','3.9','3.10'],
+ ['4.1','4.2','4.3','4.4'],['4.5','4.6','4.7','4.8'],['4.9','4.10','4.11','4.12'],['4.13','4.14','4.15','4.16'],
+ ['5.1','5.2','5.3','5.4'],['5.5','5.6','5.7','5.8'],['5.9','5.10','5.11'],
+ ['6.1','6.2','6.3','6.4','6.5'],['6.6','6.7','6.8','6.9'],
+ ['7.1','7.2','7.3','7.4','7.5'],['7.6','7.7','7.8','7.9','7.10'],
+];
+const PLAN_KEY='sh7_planstart';
+function planStart(){let d=null;try{d=localStorage.getItem(PLAN_KEY);}catch(e){}
+  if(!d){d=new Date().toISOString().slice(0,10);try{localStorage.setItem(PLAN_KEY,d);}catch(e){}}return d;}
+function resetPlanStart(){if(confirm('将打卡开始日期重置为今天？阅读记录不受影响。')){try{localStorage.setItem(PLAN_KEY,new Date().toISOString().slice(0,10));}catch(e){}buildPlan();}}
+function openPlan(){show('plan');buildPlan();setHash('#/plan');}
+function togglePlanDay(i){const el=document.getElementById('pd-'+i);if(el)el.classList.toggle('open');}
+function buildPlan(){
+  const start=planStart(),rs=readSet();
+  const doneDays=DAY_PLAN.map(ids=>ids.every(id=>rs.has(id)));
+  let cur=doneDays.indexOf(false);const finished=cur<0;if(finished)cur=DAY_PLAN.length;
+  const readCount=NODES.filter(n=>rs.has(n.id)).length;
+  const natural=Math.max(1,Math.floor((Date.now()-new Date(start+'T00:00:00'))/864e5)+1);
+  const sum=document.getElementById('plan-summary');
+  sum.innerHTML=`<div class="ps-card"><b>${finished?'🎉 完成':'Day '+(cur+1)}</b><span>当前进度</span></div>
+    <div class="ps-card"><b>${doneDays.filter(Boolean).length} / 21</b><span>已完成天数</span></div>
+    <div class="ps-card"><b>${readCount} / 85</b><span>已读概念</span></div>
+    <div class="ps-card"><b>第 ${natural} 天</b><span>始于 ${start}</span></div>`;
+  document.getElementById('plan-bar-i').style.width=(readCount/NODES.length*100)+'%';
+  document.getElementById('plan-days').innerHTML=DAY_PLAN.map((ids,i)=>{
+    const done=doneDays[i],locked=i>cur,open=i===cur&&!finished;
+    const g=byId[ids[0]].g,hb=HABITS.find(x=>x.g===g);
+    const label=hb?`习惯${hb.num} · ${hb.name}`:'地基概念';
+    const state=done?'<span class="pd-state done">✓ 已完成</span>':locked?'<span class="pd-state lock">待解锁</span>':'<span class="pd-state now">进行中</span>';
+    const body=locked?`<div class="pd-lockmsg">完成 Day ${i} 后解锁</div>`
+      :ids.map(id=>{const n=byId[id];return `<a class="pd-item ${rs.has(id)?'read':''}" data-cid="${id}" onclick="openConcept('${id}')"><span class="pid">${id}</span><span class="pt">${n.t}</span><span class="pr"></span></a>`;}).join('');
+    return `<div class="pd${done?' done':''}${locked?' locked':''}${i===cur&&!finished?' cur':''}${open?' open':''}" id="pd-${i}">
+      <div class="pd-head" ${locked?'':`onclick="togglePlanDay(${i})"`}>
+        <span class="pd-day">Day ${String(i+1).padStart(2,'0')}</span>
+        <span class="pd-hb">${label}</span>
+        <span class="pd-info">${ids.length} 个概念${done?'':locked?'':' · 读完即解锁下一天'}</span>
+        ${state}
+      </div>
+      <div class="pd-body">${body}</div>
+    </div>`;
+  }).join('');
+}
 function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById('view-'+v).classList.add('on');window.scrollTo(0,0);}
 /* ---------- hash 路由：URL 直达每个概念 ---------- */
 const grpSlug={'第零层·地基':'0','习惯1':'1','习惯2':'2','习惯3':'3','习惯4':'4','习惯5':'5','习惯6':'6','习惯7':'7'};
@@ -412,6 +514,7 @@ function router(){
   if(m=h.match(/^\/c\/(.+)$/)){const id=decodeURIComponent(m[1]);if(byId[id])return openConcept(id);}
   else if(m=h.match(/^\/h\/([0-7])$/)){const g=slugGrp[m[1]];if(g)return openHabit(g);}
   else if(m=h.match(/^\/s\/(\d+)$/)){const i=+m[1];if(SCENES[i])return openScene(i);}
+  else if(h==='/plan'){return openPlan();}
   goHome();
 }
 window.addEventListener('hashchange',router);
@@ -446,6 +549,7 @@ function buildHeroNav(){
     {ic:'📚',t:'地基概念',d:'读懂七习惯前的根概念',n:NODES.filter(x=>x.g==='第零层·地基').length+' 个',act:"jump('anchor-found')"},
     {ic:'📈',t:'成长轴',d:'七个习惯，层层递进',n:HABITS.length+' 个习惯',act:"jump('anchor-axis')"},
     {ic:'🎯',t:'场景查询',d:'带着困境，直接查',n:SCENES.length+' 个场景',act:"jump('anchor-scene')"},
+    {ic:'⚑',t:'习惯打卡',d:'每天几个概念，21 天读完',n:'21 天',act:"openPlan()"},
   ];
   const el=document.getElementById('hero-nav');
   if(el)el.innerHTML=cards.map(c=>`<a class="nav-card" onclick="${c.act}"><span class="nc-ic">${c.ic}</span><span class="nc-body"><span class="nc-t">${c.t}</span><span class="nc-d">${c.d}</span></span><span class="nc-n">${c.n}</span></a>`).join('');
