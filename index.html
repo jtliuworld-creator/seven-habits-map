@@ -72,6 +72,13 @@ nav .sp{flex:1}
 .hc-sub{font-size:14px;color:var(--dim);padding:13px 2px}
 .hc-sub:hover{color:var(--accent)}
 
+html{scroll-behavior:smooth}
+::selection{background:var(--accent);color:#fff}
+a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.navlink.on{color:var(--accent);font-weight:600}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rv{opacity:1;transform:none;transition:none}}
 .band{padding:58px 0 66px}
 .band-screen{min-height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center}
 .band-screen>.wrap{width:100%}
@@ -344,11 +351,11 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 <nav><div class="wrap">
   <div class="logo" onclick="goHome()"><span class="logo-mark">7</span><span class="logo-text"><b>七个习惯 · <span class="a">概念图谱</span></b><i>读懂并践行 · 85 个核心概念</i></span></div>
   <div class="sp"></div>
-  <a class="navlink" onclick="jump('anchor-found')">地基概念</a>
-  <a class="navlink" onclick="jump('anchor-axis')">成长轴</a>
-  <a class="navlink" onclick="jump('anchor-scene')">场景查询</a>
+  <a class="navlink" data-spy="sec-found" onclick="jump('anchor-found')">地基概念</a>
+  <a class="navlink" data-spy="sec-axis" onclick="jump('anchor-axis')">成长轴</a>
+  <a class="navlink" data-spy="sec-scene" onclick="jump('anchor-scene')">场景查询</a>
   <a class="nav-cta" onclick="openPlan()">⚑ 习惯打卡</a>
-  <div class="searchbox"><span class="ic">⌕</span><input id="nav-search" placeholder="搜索概念…" autocomplete="off"><div class="results" id="nav-results"></div></div>
+  <div class="searchbox"><span class="ic">⌕</span><input id="nav-search" placeholder="搜索概念（/）" aria-label="搜索概念" autocomplete="off"><div class="results" id="nav-results"></div></div>
 </div></nav>
 
 <div class="view on" id="view-home">
@@ -472,7 +479,7 @@ function setRead(id,v){const s=readSet();v?s.add(id):s.delete(id);localStorage.s
 function onToggleRead(id){const v=!isRead(id);setRead(id,v);const b=document.getElementById('cp-readbtn');if(b){b.classList.toggle('on',v);b.textContent=v?'✓ 已读':'标记已读';}}
 function readNext(cur,next){setRead(cur,true);openConcept(next);}
 function neighbors(id){const i=ORDER.indexOf(id);return{prev:i>0?byId[ORDER[i-1]]:null,next:i<ORDER.length-1?byId[ORDER[i+1]]:null};}
-function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;if(document.getElementById('axis'))buildAxis();if(document.getElementById('maturity-fig'))buildMaturity();const vp=document.getElementById('view-plan');if(vp&&vp.classList.contains('on'))buildPlan();}
+function updateProgress(){const s=readSet();const total=NODES.length;const done=NODES.filter(n=>s.has(n.id)).length;const hp=document.getElementById('home-progress');if(hp)hp.innerHTML=`<div class="hp-row"><span>复习进度</span><span class="hp-num"><b>${done}</b> / ${total} 篇已读</span></div><div class="hp-bar"><i style="width:${total?done/total*100:0}%"></i></div>`;if(document.getElementById('axis'))buildAxis();if(document.getElementById('maturity-fig'))buildMaturity();const vp=document.getElementById('view-plan');if(vp&&vp.classList.contains('on'))buildPlan();if(window._focusables)window._focusables();}
 function updateReadbar(){const h=document.documentElement;const max=h.scrollHeight-h.clientHeight;const sc=h.scrollTop||document.body.scrollTop||0;const b=document.getElementById('readbar');if(b)b.style.width=(max>0?Math.min(100,sc/max*100):0)+'%';}
 window.addEventListener('scroll',updateReadbar,{passive:true});
 /* ===== 21 天习惯打卡（进度驱动）===== */
@@ -526,7 +533,7 @@ function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.remov
 /* ---------- hash 路由：URL 直达每个概念 ---------- */
 const grpSlug={'第零层·地基':'0','习惯1':'1','习惯2':'2','习惯3':'3','习惯4':'4','习惯5':'5','习惯6':'6','习惯7':'7'};
 const slugGrp={'0':'第零层·地基','1':'习惯1','2':'习惯2','3':'习惯3','4':'习惯4','5':'习惯5','6':'习惯6','7':'习惯7'};
-let _routing=false;
+let _routing=false;let _curId=null;
 function setHash(h){if(location.hash!==h){_routing=true;location.hash=h;}}
 function setTitle(t){document.title=t?t+' · 七个习惯概念图谱':'七个习惯 · 概念图谱';}
 function goHome(){show('home');setHash('#/');setTitle('');}
@@ -647,7 +654,7 @@ function openScene(i){const s=SCENES[i];
   show('scene');setHash('#/s/'+i);setTitle(s.scene);}
 const typeLabel={progression:'递进依赖 →',shared:'共享基础 ◇',prereq:'前置条件 ⊢'};
 function openConcept(id){
-  const n=byId[id];const hb=HABITS.find(x=>x.g===n.g);
+  _curId=id;const n=byId[id];const hb=HABITS.find(x=>x.g===n.g);
   document.getElementById('cp-crumb').innerHTML=`<a onclick="goHome()">首页</a> › <a onclick="openHabit('${n.g}')">${hb?hb.name:'地基概念'}</a> › ${n.t}`;
   const lf=n.lf;
   const seg=(t,b,f)=>`<div class="seg"><div class="seg-h" onclick="this.parentNode.classList.toggle('fold')"><span class="dot"></span>${t}<span class="tog">展开/收起</span></div><div class="seg-body">${b}</div></div>`;
@@ -680,5 +687,27 @@ function hideResults(){document.querySelectorAll('.results').forEach(r=>r.classL
 document.getElementById('nav-search').addEventListener('input',e=>doSearch(e.target.value,'nav-results'));
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))hideResults();});
 buildFound();buildAxis();buildScenes();buildHeroNav();buildMaturity();updateProgress();router();startQuoteRotation();updateReadbar();
+/* ===== 国际化打磨：滚动渐入 / scroll-spy / 键盘可达 ===== */
+(function(){
+  if('IntersectionObserver' in window){
+    const els=document.querySelectorAll('#view-home .slab,#view-home .intro,#view-home .found-grid,#view-home .maturity,#view-home .scene-grid,#view-home .video-grid,#view-home .closing');
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.1});
+    els.forEach(el=>{el.classList.add('rv');io.observe(el);});
+    const links={};document.querySelectorAll('.navlink[data-spy]').forEach(a=>links[a.dataset.spy]=a);
+    const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){Object.values(links).forEach(x=>x.classList.remove('on'));const a=links[e.target.id];if(a)a.classList.add('on');}});},{rootMargin:'-40% 0px -55% 0px'});
+    Object.keys(links).forEach(id=>{const el=document.getElementById(id);if(el)spy.observe(el);});
+  }
+  function focusables(){document.querySelectorAll('a[onclick]:not([tabindex])').forEach(a=>a.tabIndex=0);}
+  window._focusables=focusables;focusables();
+  const _show=show;show=function(v){_show(v);setTimeout(focusables,40);if(v!=='home')document.querySelectorAll('.navlink.on').forEach(x=>x.classList.remove('on'));};
+  document.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('a[onclick]')){e.preventDefault();e.target.click();return;}
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    if(e.target.matches&&e.target.matches('input,textarea')){if(e.key==='Escape'){hideResults();e.target.blur();}return;}
+    if(e.key==='/'){e.preventDefault();const i=document.getElementById('nav-search');if(i)i.focus();}
+    else if(e.key==='Escape')hideResults();
+    else if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&document.getElementById('view-concept').classList.contains('on')&&_curId){const nb=neighbors(_curId);const t=e.key==='ArrowLeft'?nb.prev:nb.next;if(t)openConcept(t.id);}
+  });
+})();
 </script>
 </body></html>
