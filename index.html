@@ -51,7 +51,7 @@ nav .sp{flex:1}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* hero */
-.hero{text-align:center;padding:56px 0 26px}
+.hero{text-align:center;padding:16px 0 26px}
 .hero .quote{font-family:"Noto Serif SC";font-weight:700;font-size:30px;letter-spacing:.5px;line-height:1.5;max-width:720px;margin:0 auto}
 .hero .quote .a{color:var(--accent)}
 .hero .qby{font-size:14px;color:var(--dim);margin-top:18px;font-style:italic}
@@ -72,6 +72,7 @@ nav .sp{flex:1}
 .hero-search .ic{position:absolute;left:18px;top:16px;color:var(--faint)}
 
 .band{padding:58px 0 66px}
+.band-screen{min-height:calc(100vh - 64px);display:flex;flex-direction:column;justify-content:center}
 .band-hero{padding:0 0 8px}
 .band-alt{background:#fffdf9;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .slab{display:block;margin:0 0 16px;scroll-margin-top:84px}
@@ -91,24 +92,21 @@ nav .sp{flex:1}
 /* maturity diagram block */
 .maturity{background:linear-gradient(135deg,#f7f0e6,#fdfaf4);border:1px solid var(--line);border-radius:18px;padding:30px;margin-bottom:26px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
 .maturity img{width:100%;border-radius:8px}
-.maturity .mtext h3{font-family:"Noto Serif SC";font-weight:700;font-size:19px;margin-bottom:12px}
-.maturity .mtext p{font-size:13.5px;color:var(--dim);line-height:1.85;margin-bottom:10px}
-.maturity .mtext .key{color:var(--accent);font-weight:500}
-.maturity .mtext b{color:var(--ink)}
+.m-side{display:flex;flex-direction:column;gap:7px}
+.ax-stage{display:flex;align-items:center;gap:9px;margin:12px 0 4px;font-size:12px}
+.ax-stage:first-child{margin-top:0}
+.ax-stage b{font-family:"Noto Serif SC";font-size:13.5px}
+.ax-stage .ax-desc{color:var(--faint)}
+.ax-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.ax-card{display:flex;align-items:center;gap:13px;padding:10px 16px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--hc);border-radius:11px;box-shadow:var(--shadow);transition:transform .12s,border-color .12s}
+.ax-card:hover{transform:translateX(4px);border-color:var(--hc)}
+.ax-num{font-family:"Noto Serif SC";font-weight:900;font-size:17px;color:var(--hc);width:20px;text-align:center;flex:none}
+.ax-name{flex:1;font-size:14.5px;font-weight:600}
+.ax-name i{font-style:normal;font-weight:400;font-size:11px;color:var(--faint);margin-left:8px}
+.ax-count{font-size:11px;color:var(--faint);flex:none}
+.ax-count.on{color:#3f8f5a;font-weight:600}
 
 /* growth axis */
-.stage{margin-bottom:14px}
-.stage-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-.stage-head .badge{font-size:11px;font-weight:700;color:#fff;padding:3px 10px;border-radius:12px;letter-spacing:1px}
-.stage-head .sdesc{font-size:12px;color:var(--faint)}
-.habit-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.habit-row.single{grid-template-columns:1fr}
-.hcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,border-color .15s;cursor:pointer;position:relative;overflow:hidden}
-.hcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--hc)}
-.hcard .bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--hc)}
-.hcard .hnum{font-family:"Noto Serif SC";font-weight:900;font-size:13px;color:var(--hc);letter-spacing:1px}
-.hcard .hname{font-family:"Noto Serif SC";font-weight:700;font-size:19px;margin:3px 0 8px}
-.hcard .hcount{font-size:12px;color:var(--dim)}.hcard .hcount b{color:var(--ink)}
 
 .scene-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .scard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,box-shadow .15s}
@@ -118,9 +116,17 @@ nav .sp{flex:1}
 .scard .sn{font-size:12px;color:var(--faint);margin-top:8px}
 
 /* closing quote */
-.closing{margin:0;padding:48px 40px;background:linear-gradient(135deg,#2c2620,#3a322a);border-radius:18px;text-align:center}
-.closing .cq{font-family:"Noto Serif SC";font-weight:500;font-size:21px;line-height:1.9;color:#f4e9da;max-width:760px;margin:0 auto}
-.closing .cby{font-size:14px;color:#bfa98c;margin-top:20px;font-style:italic}
+.closing{margin:48px auto 0;padding:36px 20px 0;border-top:1px solid var(--line);text-align:center;max-width:780px}
+.closing .cq{font-family:"Noto Serif SC";font-weight:500;font-size:18px;line-height:1.95;color:var(--dim)}
+.closing .cby{font-size:13px;color:var(--faint);margin-top:14px;font-style:italic}
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.vcard{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s,border-color .15s}
+.vcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.vcard .vic{display:flex;width:38px;height:38px;border-radius:50%;background:var(--accent-soft);color:var(--accent);align-items:center;justify-content:center;font-size:13px;margin-bottom:14px}
+.vcard b{display:block;font-family:"Noto Serif SC";font-weight:700;font-size:16px;margin-bottom:8px}
+.vcard p{font-size:13px;color:var(--dim);line-height:1.75;margin-bottom:12px}
+.vcard .vgo{font-size:12px;color:var(--accent)}
+@media(max-width:760px){.video-grid{grid-template-columns:1fr}}
 
 /* detail / concept (same as before) */
 .detail-head{padding:40px 0 24px;border-bottom:1px solid var(--line)}
@@ -221,20 +227,20 @@ nav .sp{flex:1}
 @media(max-width:620px){.pd-head{flex-wrap:wrap;gap:8px}.pd-info{display:none}.plan-summary{gap:10px}.ps-card{padding:10px 14px;min-width:100px}}
 
 footer{border-top:1px solid var(--line);background:#fffdf9}
-.ft-grid{display:grid;grid-template-columns:1.2fr 0.8fr 1.2fr 1.2fr;gap:36px;padding:48px 0 36px}
+.ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1.5fr;gap:56px;padding:54px 0 42px}
 .ft-brand p{font-size:12.5px;color:var(--dim);margin-top:14px;line-height:1.8;max-width:240px}
 .ft-col h4{font-family:"Noto Serif SC";font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:14px}
 .ft-col a{display:block;font-size:13px;color:var(--dim);padding:5px 0}
 .ft-col a:hover{color:var(--accent)}
 .ft-col a span{display:block;font-size:11px;color:var(--faint);margin-top:1px}
 .ft-note{font-size:11px;color:var(--faint);margin-top:12px;line-height:1.7}
-.ft-bottom{border-top:1px solid var(--line);padding:16px 0 18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--faint)}
+.ft-bottom{border-top:1px solid var(--line);padding:18px 0 20px;text-align:center;font-size:12px;color:var(--faint)}
 @media(max-width:760px){.ft-grid{grid-template-columns:1fr 1fr;gap:28px}}
 @media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
 @media(max-width:760px){
-  .habit-row,.scene-grid,.concept-list,.found-grid,.maturity{grid-template-columns:1fr}
+  .scene-grid,.concept-list,.found-grid,.maturity{grid-template-columns:1fr}
   .cpage{grid-template-columns:1fr}.cside{position:static}
-  .hero .quote{font-size:23px}.searchbox{display:none}.navlink{display:none}.logo-text i{display:none}.closing{padding:32px 24px}.closing .cq{font-size:17px}
+  .hero .quote{font-size:23px}.searchbox{display:none}.navlink{display:none}.logo-text i{display:none}.closing{padding:28px 8px 0}.closing .cq{font-size:16px}
   .hero-quotes{flex-direction:column;max-width:560px}
   .hero-quotes .hq{padding:24px 18px 14px}
   .hero-quotes .hq+.hq{border-left:none;border-top:1px solid var(--line)}
@@ -242,10 +248,10 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
   .cp-nav{flex-direction:column}
   .cp-nav .cpn.next{text-align:left;align-items:flex-start}
   .cpn-read{align-self:stretch;text-align:center}
-  .tl-stage{grid-template-columns:1fr;gap:14px}
-  .tl-stage::before{display:none}
-  .tl-rail{padding-left:24px}
-  .tl-cards,.tl-cards.single{grid-template-columns:1fr}
+  
+  
+  
+  
   .hero-grid{grid-template-columns:1fr;gap:30px}
   .hero-quote{min-height:0}
   .hero-quote .hq-text{font-size:21px}
@@ -277,17 +283,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 .hp-bar i{display:block;height:100%;background:var(--g7);border-radius:5px;transition:width .35s ease}
 .dh-prog{margin-top:10px;font-size:13px;color:var(--g7);font-weight:700}
 /* ---- 成长轴：竖向时间轴 ---- */
-.tl-stage{display:grid;grid-template-columns:148px 1fr;gap:24px;position:relative;padding-bottom:28px}
-.tl-stage:not(:last-child)::before{content:"";position:absolute;left:6px;top:22px;bottom:2px;width:2px;background:var(--line)}
-.tl-rail{position:relative;padding-left:28px;padding-top:2px}
-.tl-dot{position:absolute;left:0;top:4px;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 4px var(--paper)}
-.tl-label b{display:block;font-family:"Noto Serif SC";font-weight:700;font-size:15px;color:var(--ink);line-height:1.45}
-.tl-label span{display:block;font-size:12px;color:var(--faint);margin-top:5px}
-.tl-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.tl-cards.single{grid-template-columns:1fr}
-.hcard .hnum::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hc);margin-right:7px;vertical-align:middle}
-.hcard:hover{border-color:var(--hc)}
-.hen{font-size:11px;color:var(--faint);font-style:italic;letter-spacing:.3px;margin:2px 0 9px}
+
 .hcount b{color:var(--faint);font-weight:700}
 .hcount b.on{color:var(--g7)}
 /* ---- 首屏：左文右构 ---- */
@@ -361,7 +357,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 </div></nav>
 
 <div class="view on" id="view-home">
-<section class="band band-hero"><div class="wrap">
+<section class="band band-hero band-screen"><div class="wrap">
   <div class="hero">
     <div class="hero-grid">
       <div class="hero-left">
@@ -377,38 +373,37 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 </div></section>
 
 <!-- 1. 地基概念 -->
-<section class="band" id="sec-found"><div class="wrap">
+<section class="band band-screen" id="sec-found"><div class="wrap">
   <div class="slab" id="anchor-found"><span class="n">01 · 地基概念</span><h2>读懂七个习惯之前，先懂这些根概念</h2></div>
   <p class="intro">柯维在七个习惯正式登场前，用整整两章铺设了这些根概念。它们是整座大厦的地基——不先理解它们，七个习惯会被读成一堆技巧。</p>
   <div class="found-grid" id="found"></div>
 </div></section>
 
   <!-- 2. 成长轴(含成熟模式图) -->
-<section class="band band-alt" id="sec-axis"><div class="wrap">
+<section class="band band-alt band-screen" id="sec-axis"><div class="wrap">
   <div class="slab" id="anchor-axis"><span class="n">02 · 成长轴</span><h2>沿着这条线，七个习惯层层递进</h2></div>
   <div class="maturity">
     <div id="maturity-fig"></div>
-    <div class="mtext">
-      <h3>成熟模式图：一张总纲</h3>
-      <p class="mlead">从<b>依赖</b>走向<b>互赖</b>，七个习惯是一条不可跳级的成长路径——这张图自下而上读：</p>
-      <div class="mstage"><span class="dot" style="background:var(--g1)"></span><span class="body"><span class="t">依赖期 → 独立期</span><span class="d">习惯 1·2·3 先<b>管好自己</b>，赢得个人领域的成功。</span></span></div>
-      <div class="mstage"><span class="dot" style="background:var(--g4)"></span><span class="body"><span class="t">独立期 → 互赖期</span><span class="d">习惯 4·5·6 再<b>与人共赢</b>，赢得公众领域的成功。</span></span></div>
-      <div class="mstage"><span class="dot" style="background:var(--g7)"></span><span class="body"><span class="t">习惯 7 · 不断更新</span><span class="d">像圆环<b>包裹全部</b>，为这趟向上的攀登持续供能。</span></span></div>
-      <p class="mnote">顺序不可颠倒。<b>点击左图任一习惯即可进入。</b></p>
-    </div>
+    <div id="axis" class="m-side"></div>
   </div>
-  <div id="axis"></div>
 </div></section>
 
   <!-- 3. 场景查询 -->
-<section class="band" id="sec-scene"><div class="wrap">
+<section class="band band-screen" id="sec-scene"><div class="wrap">
   <div class="slab" id="anchor-scene"><span class="n">03 · 场景查询</span><h2>带着困境来，直接跳到该看的概念</h2></div>
   <p class="intro">「文章读完就关掉，工具是遇到问题会回来翻的东西。」选一个此刻最像你的困境：</p>
   <div class="scene-grid" id="scenes"></div>
 </div></section>
 
-  <!-- closing quote -->
-<section class="band band-alt"><div class="wrap">
+  <!-- 04 柯维经典影像 + 结语 -->
+<section class="band band-alt band-screen" id="sec-video"><div class="wrap">
+  <div class="slab" id="anchor-video"><span class="n">04 · 柯维经典影像</span><h2>听柯维本人讲，再看一遍</h2></div>
+  <p class="intro">文字读懂了框架，影像能看到态度。这三段最经典：</p>
+  <div class="video-grid">
+    <a class="vcard" href="https://search.bilibili.com/all?keyword=%E6%9F%AF%E7%BB%B4%20%E5%A4%A7%E7%9F%B3%E5%A4%B4%20%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86" target="_blank" rel="noopener"><span class="vic">▶</span><b>「大石头」现场演示</b><p>习惯 3 最著名的实验：先放大石头，沙子才装得下。一只玻璃罐，讲透"要事第一"。</p><span class="vgo">在 B 站观看 →</span></a>
+    <a class="vcard" href="https://search.bilibili.com/all?keyword=%E5%8F%B2%E8%92%82%E8%8A%AC%C2%B7%E6%9F%AF%E7%BB%B4%20%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%20%E8%AE%B2%E5%BA%A7" target="_blank" rel="noopener"><span class="vic">▶</span><b>柯维亲述七个习惯</b><p>作者本人的讲座与访谈：半小时听完整个框架，比任何转述都有分量。</p><span class="vgo">在 B 站观看 →</span></a>
+    <a class="vcard" href="https://search.bilibili.com/all?keyword=%E6%9F%AF%E7%BB%B4%20%E6%80%9D%E7%BB%B4%E8%BD%AC%E6%8D%A2%20%E5%9C%B0%E9%93%81" target="_blank" rel="noopener"><span class="vic">▶</span><b>地铁上的思维转换</b><p>全书最有名的故事：同一节车厢，同一个事实，两种世界。柯维亲口讲述。</p><span class="vgo">在 B 站观看 →</span></a>
+  </div>
   <div class="closing">
     <div class="cq">"谁也无法说服他人改变，因为我们每个人都守着一扇只能从内开启的改变之门，不论动之以情或晓之以理，我们都不能替别人开门。"</div>
     <div class="cby">—— 玛丽琳·弗格森（Marilyn Ferguson）</div>
@@ -460,6 +455,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
       <a onclick="jump('anchor-found')">地基概念</a>
       <a onclick="jump('anchor-axis')">成长轴</a>
       <a onclick="jump('anchor-scene')">场景查询</a>
+      <a onclick="jump('anchor-video')">柯维经典影像</a>
       <a onclick="openPlan()">21 天习惯打卡</a>
       <a onclick="openConcept('0.1')">从第一篇开始读 →</a>
     </div>
@@ -469,17 +465,9 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
       <a href="https://search.douban.com/book/subject_search?search_text=%E8%A6%81%E4%BA%8B%E7%AC%AC%E4%B8%80" target="_blank" rel="noopener">《要事第一》<span>习惯 3 的整本展开</span></a>
       <a href="https://search.douban.com/book/subject_search?search_text=%E7%AC%AC3%E9%80%89%E6%8B%A9" target="_blank" rel="noopener">《第 3 选择》<span>习惯 4–6 的晚年集大成</span></a>
       <a href="https://search.douban.com/book/subject_search?search_text=%E4%BF%A1%E4%BB%BB%E7%9A%84%E9%80%9F%E5%BA%A6" target="_blank" rel="noopener">《信任的速度》<span>小柯维写组织里的情感账户</span></a>
-      <a href="https://search.douban.com/book/subject_search?search_text=%E9%AB%98%E6%95%88%E8%83%BD%E5%AE%B6%E5%BA%AD%E7%9A%847%E4%B8%AA%E4%B9%A0%E6%83%AF" target="_blank" rel="noopener">《高效能家庭的 7 个习惯》<span>七个习惯 × 家庭场景</span></a>
-    </div>
-    <div class="ft-col">
-      <h4>柯维经典影像</h4>
-      <a href="https://search.bilibili.com/all?keyword=%E6%9F%AF%E7%BB%B4%20%E5%A4%A7%E7%9F%B3%E5%A4%B4%20%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86" target="_blank" rel="noopener">「大石头」时间管理演示<span>习惯 3 最著名的现场实验</span></a>
-      <a href="https://search.bilibili.com/all?keyword=%E5%8F%B2%E8%92%82%E8%8A%AC%C2%B7%E6%9F%AF%E7%BB%B4%20%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF" target="_blank" rel="noopener">柯维谈七个习惯<span>讲座与访谈合集</span></a>
-      <a href="https://search.bilibili.com/all?keyword=%E9%AB%98%E6%95%88%E8%83%BD%E4%BA%BA%E5%A3%AB%E7%9A%84%E4%B8%83%E4%B8%AA%E4%B9%A0%E6%83%AF%20%E8%A7%A3%E8%AF%BB" target="_blank" rel="noopener">全书精讲与解读<span>各家视频解读对照着看</span></a>
-      <p class="ft-note">以上为豆瓣 / B 站检索入口，内容由对应平台提供。</p>
     </div>
   </div>
-  <div class="ft-bottom"><span>基于史蒂芬·柯维《高效能人士的七个习惯》整理 · 仅作学习交流</span><span>85 个概念 · 85 张图 · 21 天打卡</span></div>
+  <div class="ft-bottom"><span>基于史蒂芬·柯维《高效能人士的七个习惯》整理 · 仅作学习交流 · 85 个概念 · 85 张图 · 21 天打卡</span></div>
 </div></footer>
 
 <script>
@@ -588,19 +576,18 @@ function buildFound(){
 }
 function buildAxis(){
   const stages=[
-    {name:'个人领域的成功',color:'--g1',desc:'管好自己（独立）',habits:['习惯1','习惯2','习惯3']},
-    {name:'公众领域的成功',color:'--g4',desc:'与人共赢（互赖）',habits:['习惯4','习惯5','习惯6']},
+    {name:'个人领域的成功',color:'--g1',desc:'管好自己 · 依赖 → 独立',habits:['习惯1','习惯2','习惯3']},
+    {name:'公众领域的成功',color:'--g4',desc:'与人共赢 · 独立 → 互赖',habits:['习惯4','习惯5','习惯6']},
     {name:'自我更新',color:'--g7',desc:'贯穿始终，包裹全部',habits:['习惯7']},
   ];
   const rs=readSet();let h='';
   stages.forEach(st=>{
-    let cards='';
+    h+=`<div class="ax-stage"><span class="ax-dot" style="background:${cssv(st.color)}"></span><b>${st.name}</b><span class="ax-desc">${st.desc}</span></div>`;
     st.habits.forEach(g=>{const hb=HABITS.find(x=>x.g===g);const col=cssv(colorVar[g]);
       const gn=NODES.filter(n=>n.g===g);const rd=gn.filter(n=>rs.has(n.id)).length;
-      cards+=`<div class="hcard" style="--hc:${col}" onclick="openHabit('${g}')"><div class="hnum">${hb.num}</div><div class="hname">${hb.name}</div><div class="hen">${hb.en}</div><div class="hcount"><b class="${rd?'on':''}">${rd}</b> / ${gn.length} 已读</div></div>`;});
-    h+=`<div class="tl-stage"><div class="tl-rail"><span class="tl-dot" style="background:${cssv(st.color)}"></span><div class="tl-label"><b>${st.name}</b><span>${st.desc}</span></div></div><div class="tl-cards${st.habits.length===1?' single':''}">${cards}</div></div>`;
+      h+=`<a class="ax-card" style="--hc:${col}" onclick="openHabit('${g}')"><span class="ax-num">${hb.num.replace('习惯','').trim()}</span><span class="ax-name">${hb.name}<i>${hb.en}</i></span><span class="ax-count${rd?' on':''}">${rd} / ${gn.length}</span></a>`;});
   });
-  document.getElementById('axis').innerHTML=h;
+  const el=document.getElementById('axis');if(el)el.innerHTML=h;
 }
 function buildScenes(){
   document.getElementById('scenes').innerHTML=SCENES.map((s,i)=>`<div class="scard" onclick="openScene(${i})"><div class="si">${sceneIcons[i]||'•'}</div><div class="st">${s.scene}</div><div class="sn">${s.nodes.length} 个相关概念</div></div>`).join('');
