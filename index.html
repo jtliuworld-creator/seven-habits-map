@@ -84,7 +84,10 @@ a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offs
 .band-screen>.wrap{width:100%}
 .band-hero{padding:0 0 8px}
 .band-deep{background:#f3ecdf;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.band-hero.band-deep{border-top:none}
+.band-hero.band-deep{border-top:none;position:relative}
+.scroll-cue{position:absolute;left:50%;transform:translateX(-50%);bottom:5vh;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--dim);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:var(--shadow);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+@media(prefers-reduced-motion:reduce){.scroll-cue{animation:none}}
 .band-lite{background:#fffdfa}
 .slab{display:block;margin:0 0 16px;scroll-margin-top:84px}
 .slab .n{display:inline-block;font-family:"Noto Serif SC";font-weight:700;font-size:13px;color:var(--accent);letter-spacing:3px;border-bottom:2px solid var(--accent);padding-bottom:4px;margin-bottom:12px}
@@ -291,21 +294,22 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 .hcount b.on{color:var(--g7)}
 /* ---- 首屏：左文右构 ---- */
 .hero{padding:44px 0 30px}
-.hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:46px;align-items:center;max-width:1000px;margin:0 auto}
+.hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:64px;align-items:center;max-width:1060px;margin:0 auto}
 .hero-left{text-align:left}
-.hero-quote{opacity:0;transition:opacity .45s ease;min-height:120px}
+.hero-quote{opacity:0;transition:opacity .45s ease;min-height:150px}
 .hero-quote.show{opacity:1}
-.hero-quote .hq-text{font-size:25px;line-height:1.62;margin:0}
+.hero-quote .hq-text{font-size:31px;line-height:1.6;margin:0;letter-spacing:.5px}
 .hero-quote .hq-by{margin-top:16px}
-.hero-tagline{margin-top:22px;font-size:14px;color:var(--dim);line-height:1.85}
+.hero-tagline{margin-top:26px;font-size:15px;color:var(--dim);line-height:1.85}
 .hero-right{display:flex;flex-direction:column}
-#hero-nav .nav-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;text-decoration:none;box-shadow:var(--shadow);transition:border-color .12s,transform .12s}
-#hero-nav .nav-card+.nav-card{margin-top:10px}
+#hero-nav .nav-card{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;text-decoration:none;box-shadow:var(--shadow);transition:border-color .12s,transform .12s,box-shadow .12s;text-align:left}
+#hero-nav .nav-card+.nav-card{margin-top:12px}
+#hero-nav .nav-card:hover{box-shadow:var(--shadow-lg)}
 #hero-nav .nav-card:hover{border-color:var(--accent);transform:translateY(-1px)}
-.nc-ic{font-size:22px;line-height:1}
+.nc-ic{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
 .nc-body{flex:1;display:flex;flex-direction:column}
-.nc-t{font-family:"Noto Serif SC";font-weight:700;font-size:15px;color:var(--ink)}
-.nc-d{font-size:12px;color:var(--dim);margin-top:3px}
+.nc-t{font-family:"Noto Serif SC";font-weight:700;font-size:16px;color:var(--ink)}
+.nc-d{font-size:12.5px;color:var(--dim);margin-top:3px}
 .nc-n{font-size:13px;color:var(--accent);font-weight:700;white-space:nowrap}
 .hero-right .home-progress{max-width:none;margin:16px 0 0;padding-top:16px;border-top:1px solid var(--line)}
 /* ---- 成熟模式图：可点击热区 + 3步说明 ---- */
@@ -360,6 +364,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
 
 <div class="view on" id="view-home">
 <section class="band band-hero band-screen band-deep"><div class="wrap">
+
   <div class="hero">
     <div class="hero-grid">
       <div class="hero-left">
@@ -372,6 +377,7 @@ footer{border-top:1px solid var(--line);background:#fffdf9}
       </div>
     </div>
   </div>
+  <a class="scroll-cue" onclick="jump('anchor-found')" aria-label="向下浏览">↓</a>
 </div></section>
 
 <!-- 1. 地基概念 -->
@@ -575,9 +581,9 @@ function buildScenes(){
 /* ===== 首屏：结构入口卡 + 名言轮播 ===== */
 function buildHeroNav(){
   const cards=[
-    {ic:'📚',t:'地基概念',d:'读懂七习惯前的根概念',n:NODES.filter(x=>x.g==='第零层·地基').length+' 个',act:"jump('anchor-found')"},
-    {ic:'📈',t:'成长轴',d:'七个习惯，层层递进',n:HABITS.length+' 个习惯',act:"jump('anchor-axis')"},
-    {ic:'🎯',t:'场景查询',d:'带着困境，直接查',n:SCENES.length+' 个场景',act:"jump('anchor-scene')"},
+    {ic:'▦',t:'地基概念',d:'读懂七习惯前的根概念',n:NODES.filter(x=>x.g==='第零层·地基').length+' 个',act:"jump('anchor-found')"},
+    {ic:'↗',t:'成长轴',d:'七个习惯，层层递进',n:HABITS.length+' 个习惯',act:"jump('anchor-axis')"},
+    {ic:'⌖',t:'场景查询',d:'带着困境，直接查',n:SCENES.length+' 个场景',act:"jump('anchor-scene')"},
     {ic:'⚑',t:'习惯打卡',d:'每天几个概念，21 天读完',n:'21 天',act:"openPlan()"},
   ];
   const el=document.getElementById('hero-nav');
